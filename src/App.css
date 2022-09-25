@@ -9,6 +9,10 @@ ul {
 	padding-inline-start: 0;
 }
 
+ul li {
+	height: 40vh;
+	flex-grow: 1;
+}
 ul li:last-child {
 	flex-grow: 10;
 }

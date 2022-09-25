@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import "./App.css";
 
 const App = () => {
 	const [token, setToken] = useState("");
-	const [displayData, setDisplayData] = useState("");
+	const [loading, setLoading] = useState(true);
 	const [images, setImages] = useState([]);
 
 	const CLIENT_ID = "9140a43db1f0411aa6a5255f3e333b18";
@@ -33,41 +33,75 @@ const App = () => {
 			window.localStorage.setItem("token", token);
 		}
 		setToken(token);
-
-		fetchUserTopTracks();
 	}, []);
 
-	const getEndpoint = async (path, method = "GET") => {
-		return await fetch(`https://api.spotify.com/v1/${path}`, {
-			method,
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		})
-			.then(async (response) => await response.json())
-			.then((json) => {
-				return json;
-			});
-	};
+	const getEndpoint = useCallback(
+		async (path, method = "GET") => {
+			return await fetch(`https://api.spotify.com/v1/${path}`, {
+				method,
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+				.then(async (response) => await response.json())
+				.then((json) => {
+					return json;
+				});
+		},
+		[token]
+	);
 
 	const logout = () => {
 		setToken("");
 		window.localStorage.removeItem("token");
 	};
 
-	const fetchUserTopTracks = async (limit = 50) => {
-		/**
-		 * https://api.spotify.com/v1/me/top/artists?limit=50&offset=0&time_range=long_term
-		 * https://api.spotify.com/v1/me/top/tracks?limit=50&offset=0&time_range=long_term
-		 *
-		 */
-		const { items } = await getEndpoint(
-			`me/player/recently-played?limit=${limit}`
-		);
+	const fetchUserTopTracks = useCallback(
+		async (limit = 50) => {
+			/**
+			 * https://api.spotify.com/v1/me/top/artists?limit=50&offset=0&time_range=long_term
+			 * https://api.spotify.com/v1/me/top/tracks?limit=50&offset=0&time_range=long_term
+			 *
+			 */
+			const { items } = await getEndpoint(
+				`me/player/recently-played?limit=${limit}`
+			);
 
-		setImages(items.map((item) => item.track.album.images[0] || undefined));
-		setDisplayData(items.map((item) => item.track.name));
+			const images = items.map(
+				(item) => item.track.album.images[0] || undefined
+			);
+			const trackNames = items.map((item) => item.track.name);
+			return { images: images, trackNames: trackNames };
+		},
+		[getEndpoint]
+	);
+
+	const getImages = () => {
+		return (
+			images &&
+			images.map(({ url }) => (
+				<li>
+					<img
+						src={url}
+						style={{
+							maxHeight: "100%",
+							minWidth: "100%",
+						}}
+					/>
+				</li>
+			))
+		);
 	};
+
+	useEffect(() => {
+		if (token) {
+			(async () => {
+				const { images, trackNames } = await fetchUserTopTracks();
+				setImages(images);
+				setLoading(false);
+			})();
+		}
+	}, [token, fetchUserTopTracks]);
 
 	return (
 		<div style={{ margin: "auto" }}>
@@ -103,22 +137,19 @@ const App = () => {
 				</button>
 			)}
 
-			<ul
-				style={{ display: "flex", flexWrap: "wrap", listStyle: "none" }}
-			>
-				{images.map(({ url }) => (
-					<li style={{ height: "40vh", flexGrow: "1" }}>
-						<img
-							src={url}
-							style={{
-								maxHeight: "100%",
-								minWidth: "100%",
-								// objectFit: "cover",
-							}}
-						/>
-					</li>
-				))}
-			</ul>
+			{loading ? (
+				<span style={{ textAlign: "center" }}>Loading...</span>
+			) : (
+				<ul
+					style={{
+						display: "flex",
+						flexWrap: "wrap",
+						listStyle: "none",
+					}}
+				>
+					{getImages()}
+				</ul>
+			)}
 		</div>
 	);
 };
