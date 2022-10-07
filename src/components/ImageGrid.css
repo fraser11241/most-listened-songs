@@ -1,0 +1,14 @@
+.image-list {
+	padding: 0;
+	padding-inline-start: 0;
+	margin-top: 0;
+}
+
+.image-list li {
+	height: 40vh;
+	flex-grow: 1;
+}
+
+.image-list li:last-child {
+	flex-grow: 10;
+}

@@ -1,18 +1,6 @@
 body {
-	background-color: azure;
+	background-color: rgb(148, 155, 155);
 	padding: 0;
 	margin: 0;
-}
-
-ul {
-	padding: 0;
-	padding-inline-start: 0;
-}
-
-ul li {
-	height: 40vh;
-	flex-grow: 1;
-}
-ul li:last-child {
-	flex-grow: 10;
+	height: 100%;
 }

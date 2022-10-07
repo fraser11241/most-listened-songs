@@ -1,11 +1,19 @@
 import React, { useEffect, useState, useCallback } from "react";
+import Button from "@mui/material/Button";
 
+import ImageGrid from "./components/ImageGrid";
+import LoginLogoutButton from "./components/LoginLogoutButton";
+import Navbar from "./components/Navbar";
+
+import SpotifyItemList from "./components/SpotifyItemList.jsx";
 import "./App.css";
 
 const App = () => {
 	const [token, setToken] = useState("");
-	const [loading, setLoading] = useState(true);
-	const [images, setImages] = useState([]);
+
+	const [recentTracks, setRecentTracks] = useState([]);
+	const [topArtists, setTopArtists] = useState([]);
+	const [topTracks, setTopTracks] = useState([]);
 
 	const CLIENT_ID = "9140a43db1f0411aa6a5255f3e333b18";
 	const REDIRECT_URI =
@@ -56,99 +64,88 @@ const App = () => {
 		window.localStorage.removeItem("token");
 	};
 
-	const fetchUserTopTracks = useCallback(
-		async (limit = 50) => {
-			/**
-			 * https://api.spotify.com/v1/me/top/artists?limit=50&offset=0&time_range=long_term
-			 * https://api.spotify.com/v1/me/top/tracks?limit=50&offset=0&time_range=long_term
-			 *
-			 */
+	const fetchUserRecentTracks = useCallback(
+		async (limit = 50, timeRange = "long_term", offset = "0") => {
 			const { items } = await getEndpoint(
-				`me/player/recently-played?limit=${limit}`
+				`me/player/recently-played?limit=${limit}&offset=${offset}&time_range=${timeRange}`
 			);
 
-			const images = items.map(
-				(item) => item.track.album.images[0] || undefined
-			);
-			const trackNames = items.map((item) => item.track.name);
-			return { images: images, trackNames: trackNames };
+			const recentTracks = items.map((item) => {
+				const { artists, name } = item.track;
+				const image = item.track.album.images[0];
+
+				return { artists, name, image };
+			});
+			return recentTracks;
 		},
 		[getEndpoint]
 	);
 
-	const getImages = () => {
-		return (
-			images &&
-			images.map(({ url }) => (
-				<li>
-					<img
-						src={url}
-						style={{
-							maxHeight: "100%",
-							minWidth: "100%",
-						}}
-					/>
-				</li>
-			))
-		);
-	};
+	const fetchUserTopTracks = useCallback(
+		async (limit = 50, timeRange = "long_term", offset = "0") => {
+			const { items } = await getEndpoint(
+				`me/top/tracks?limit=${limit}&offset=${offset}&time_range=${timeRange}`
+			);
+
+			const topTracks = items.map((item) => {
+				const { artists, id, name } = item;
+				const image = item.album.images[0];
+
+				return { artists, id, name, image };
+			});
+			return topTracks;
+		},
+		[getEndpoint]
+	);
+
+	/** Return in form [{image, name, id}, {...}]
+	 *
+	 */
+	const fetchUserTopArtists = useCallback(
+		async (limit = 50, timeRange = "long_term", offset = "0") => {
+			const { items } = await getEndpoint(
+				`me/top/artists?limit=${limit}&offset=${offset}&time_range=${timeRange}`
+			);
+
+			const topArtists = items.map((item) => {
+				const image = item.images[0] || undefined;
+				const { name, id } = item;
+
+				return { image, name, id };
+			});
+			return topArtists;
+		},
+		[getEndpoint]
+	);
 
 	useEffect(() => {
 		if (token) {
 			(async () => {
-				const { images, trackNames } = await fetchUserTopTracks();
-				setImages(images);
-				setLoading(false);
+				setRecentTracks(await fetchUserRecentTracks());
+				setTopArtists(await fetchUserTopArtists());
+				setTopTracks(await fetchUserTopTracks());
 			})();
 		}
-	}, [token, fetchUserTopTracks]);
+	}, [token, fetchUserRecentTracks, fetchUserTopArtists, fetchUserTopTracks]);
 
+	console.log(recentTracks);
 	return (
 		<div style={{ margin: "auto" }}>
 			{/* <h1>Most listened</h1> */}
-			{!token ? (
-				<a
-					href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`}
-				>
-					Login to Spotify
-				</a>
-			) : (
-				<button
-					style={{
-						position: "absolute",
-						top: "10px",
-						right: "10px",
-						backgroundColor: "green",
-						borderRadius: "10px",
-						border: "1px solid rgba(27, 31, 35, 0.15)",
-						color: "whitesmoke",
-						fontFamily:
-							"-apple-system,system-ui,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji",
-						fontSize: "14px",
-						fontWeight: "500",
-						lineHeight: "20px",
-						margin: 0,
-						padding: "10px 12px",
-						textAlign: "center",
-					}}
-					onClick={logout}
-				>
-					Logout of spotify
-				</button>
+			<LoginLogoutButton
+				isLoggedIn={!token}
+				loginUrl={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`}
+				handleLogout={logout}
+			/>
+
+			{token && (
+				<>
+					<Navbar />
+				</>
 			)}
 
-			{loading ? (
-				<span style={{ textAlign: "center" }}>Loading...</span>
-			) : (
-				<ul
-					style={{
-						display: "flex",
-						flexWrap: "wrap",
-						listStyle: "none",
-					}}
-				>
-					{getImages()}
-				</ul>
+			{recentTracks && recentTracks.length && (
+				<SpotifyItemList items={recentTracks} />
 			)}
 		</div>
 	);
