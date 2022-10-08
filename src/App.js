@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
-import Button from "@mui/material/Button";
 
 import ImageGrid from "./components/ImageGrid";
 import LoginLogoutButton from "./components/LoginLogoutButton";
 import Navbar from "./components/Navbar";
+import { SpotifyItemTypes } from "./enums/SpotifyItemTypes";
 
 import SpotifyItemList from "./components/SpotifyItemList.jsx";
 import "./App.css";
@@ -14,6 +14,7 @@ const App = () => {
 	const [recentTracks, setRecentTracks] = useState([]);
 	const [topArtists, setTopArtists] = useState([]);
 	const [topTracks, setTopTracks] = useState([]);
+	const [currentItemType, setCurrentItemType] = useState(0);
 
 	const CLIENT_ID = "9140a43db1f0411aa6a5255f3e333b18";
 	const REDIRECT_URI =
@@ -118,6 +119,22 @@ const App = () => {
 		[getEndpoint]
 	);
 
+	// Return the correct type of items based on the currentItemType
+	const getItems = () => {
+		switch (currentItemType) {
+			case SpotifyItemTypes.RECENT_TRACK:
+				return recentTracks;
+			case SpotifyItemTypes.ARTIST:
+				return topArtists;
+			case SpotifyItemTypes.TOP_TRACK:
+				return topTracks;
+			default:
+				return null;
+		}
+	};
+
+	console.log(getItems());
+
 	useEffect(() => {
 		if (token) {
 			(async () => {
@@ -128,9 +145,8 @@ const App = () => {
 		}
 	}, [token, fetchUserRecentTracks, fetchUserTopArtists, fetchUserTopTracks]);
 
-	console.log(recentTracks);
 	return (
-		<div style={{ margin: "auto" }}>
+		<div className="page with-sidenav">
 			{/* <h1>Most listened</h1> */}
 			<LoginLogoutButton
 				isLoggedIn={!token}
@@ -140,13 +156,48 @@ const App = () => {
 
 			{token && (
 				<>
-					<Navbar />
+					<Navbar
+						buttons={[
+							{
+								text: "Recently listened tracks",
+								onClick: () =>
+									setCurrentItemType(
+										SpotifyItemTypes.RECENT_TRACK
+									),
+							},
+							{
+								text: "Most listened artists",
+								onClick: () =>
+									setCurrentItemType(SpotifyItemTypes.ARTIST),
+							},
+							{
+								text: "Most listened songs",
+								onClick: () =>
+									setCurrentItemType(
+										SpotifyItemTypes.TOP_TRACK
+									),
+							},
+						]}
+					/>
 				</>
 			)}
 
-			{recentTracks && recentTracks.length && (
-				<SpotifyItemList items={recentTracks} />
-			)}
+			<div className="page-content">
+				<div
+					style={{
+						width: "100%",
+						height: "125px",
+						backgroundColor: "turquoise",
+					}}
+				></div>
+
+				{recentTracks && recentTracks.length && (
+					<SpotifyItemList
+						items={getItems()}
+						type={currentItemType}
+					/>
+				)}
+			</div>
 		</div>
 	);
 };

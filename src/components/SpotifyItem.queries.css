@@ -1,0 +1,6 @@
+@media (max-width: 500px) {
+	.spotify-item-container {
+		height: 75px;
+		font-size: 12px;
+	}
+}

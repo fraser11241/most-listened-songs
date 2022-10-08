@@ -1,0 +1,64 @@
+.spotify-item-wrapper {
+	display: inline-flex;
+	margin-bottom: 5px;
+}
+
+.spotify-item-container {
+	display: inline-flex;
+	border-radius: 3px;
+	transition: background 0.15s ease-in-out;
+	flex-grow: 1;
+	height: 150px;
+	width: 100%;
+	flex-grow: 1;
+
+	font-size: 16px;
+}
+
+.spotify-item-container:hover {
+}
+
+.spotify-item-container .title,
+.spotify-item-container .subtitle {
+	min-width: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-weight: 300;
+}
+
+.list-position-indicator {
+	display: flex;
+	align-items: center;
+	padding: 0 20px;
+	font-size: 35px;
+}
+
+.title {
+	font-size: 150%;
+}
+
+.subtitle {
+	font-size: 100%;
+}
+
+.spotify-item-container .subtitle {
+	color: darkslategrey;
+}
+
+.spotify-item-image {
+	display: inline-block;
+	aspect-ratio: 1;
+	object-fit: cover;
+	height: 100%;
+	width: auto;
+}
+
+.title-subtitle-wrapper {
+	padding: 5px 5px;
+	flex-grow: 0;
+	display: inline-flex;
+	flex-direction: column;
+	justify-content: center;
+	min-width: 0;
+}

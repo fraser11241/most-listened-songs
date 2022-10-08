@@ -1,19 +1,15 @@
 import React from "react";
-import List from "@mui/material/List";
-import Button from "@mui/material/ListItem";
 
 import "./Navbar.css";
 import "./Navbar.queries.css";
 
-const Navbar = () => {
+const Navbar = ({ buttons }) => {
 	return (
 		<div className="navbar-wrapper">
 			<div className="navbar">
-				<Button>text1</Button>
-
-				<Button>text1</Button>
-
-				<Button>text1</Button>
+				{buttons.map(({ text, onClick }) => (
+					<button onClick={onClick}>{text}</button>
+				))}
 			</div>
 		</div>
 	);

@@ -1,15 +1,20 @@
 import React from "react";
-import Box from "@mui/material/Box";
 
-import { SpotifyItemTypes } from "../enums/SpotifyItemTypes";
+import "./SpotifyItem.css";
+import "./SpotifyItem.queries.css";
 
-const SpotifyItem = ({ item, type }) => {
-	const { url, width: imageWidth, height: imageHeight } = item.image;
-
+const SpotifyItem = ({ title, subtitle, imageUrl }) => {
 	return (
-		<Box sx={{ display: "inline-flex" }}>
-			<Box component="img" src={url} /> Text here
-		</Box>
+		// <div className="spotify-item-wrapper">
+		<div className="spotify-item-container">
+			<img className="spotify-item-image" src={imageUrl} alt={title} />
+
+			<div className="title-subtitle-wrapper">
+				<span className="title">{title}</span>
+				<span className="subtitle">{subtitle}</span>
+			</div>
+		</div>
+		// </div>
 	);
 };
 

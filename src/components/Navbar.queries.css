@@ -17,4 +17,8 @@
 		padding-left: 0;
 		padding-bottom: 50px;
 	}
+
+	.page.with-sidenav .page-content {
+		margin-left: 0;
+	}
 }

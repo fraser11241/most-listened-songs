@@ -1,33 +1,28 @@
 import React from "react";
-import Button from "@mui/material/Button";
 
 const LoginLogoutButton = ({ isLoggedIn, loginUrl, handleLogout }) => {
 	return isLoggedIn ? (
-		<Button
-			component={"a"}
-			href={loginUrl}
-			variant="contained"
-			sx={{
+		<a
+			style={{
 				position: "absolute",
 				top: "10px",
 				right: "10px",
 			}}
+			href={loginUrl}
 		>
 			Login to Spotify
-		</Button>
+		</a>
 	) : (
-		<Button
-			sx={{
+		<button
+			style={{
 				position: "absolute",
 				top: "10px",
 				right: "10px",
 			}}
-			variant="contained"
 			onClick={handleLogout}
-			color="success"
 		>
 			Logout of spotify
-		</Button>
+		</button>
 	);
 };
 

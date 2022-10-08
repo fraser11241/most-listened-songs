@@ -1,10 +1,14 @@
+:root {
+	--navbar-width: 200px;
+}
+
 .navbar-wrapper {
 	display: inline-block;
 	position: fixed;
 	left: 0;
 	top: 0;
 	height: 100vh;
-	width: 100px;
+	width: var(--navbar-width);
 	background-color: red;
 }
 
@@ -13,7 +17,7 @@
 	flex-direction: column;
 }
 
-#root {
-	padding-left: 100px;
+.page.with-sidenav .page-content {
+	margin-left: var(--navbar-width);
 	padding-bottom: 0;
 }
