@@ -184,6 +184,7 @@ const App = () => {
 
 			<div className="page-content">
 				<div
+					className="page-header"
 					style={{
 						width: "100%",
 						height: "125px",
@@ -191,12 +192,14 @@ const App = () => {
 					}}
 				></div>
 
-				{recentTracks && recentTracks.length && (
-					<SpotifyItemList
-						items={getItems()}
-						type={currentItemType}
-					/>
-				)}
+				<div className="page-body">
+					{recentTracks && recentTracks.length && (
+						<SpotifyItemList
+							items={getItems()}
+							type={currentItemType}
+						/>
+					)}
+				</div>
 			</div>
 		</div>
 	);

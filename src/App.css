@@ -19,6 +19,12 @@ body {
 	margin: 0;
 }
 
+/* Structure page styling */
+.page-body {
+	padding: 20px;
+}
+
+/* Button styling */
 button {
 	background-color: #5e5df0;
 	color: #fff;
