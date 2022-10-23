@@ -28,7 +28,7 @@ const SpotifyItemList = ({ items, type }) => {
 		<ol className="spotify-item-list">
 			{items.map((item, index) => {
 				const content = getContentForItem(item, type);
-				console.log("ITEMS", items, content);
+
 				return (
 					// <a>
 					<li>

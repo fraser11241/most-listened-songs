@@ -4,6 +4,12 @@ import ImageGrid from "./components/ImageGrid";
 import LoginLogoutButton from "./components/LoginLogoutButton";
 import Navbar from "./components/Navbar";
 import { SpotifyItemTypes } from "./enums/SpotifyItemTypes";
+import {
+	getEndpoint,
+	getUserInfo,
+	createEmptyPlaylist,
+	addSongsToPlaylist,
+} from "./utils/spotify";
 
 import SpotifyItemList from "./components/SpotifyItemList.jsx";
 import "./App.css";
@@ -14,6 +20,7 @@ const App = () => {
 	const [recentTracks, setRecentTracks] = useState([]);
 	const [topArtists, setTopArtists] = useState([]);
 	const [topTracks, setTopTracks] = useState([]);
+	const [userInfo, setUserInfo] = useState([]);
 	const [currentItemType, setCurrentItemType] = useState(0);
 
 	const CLIENT_ID = "9140a43db1f0411aa6a5255f3e333b18";
@@ -44,22 +51,6 @@ const App = () => {
 		setToken(token);
 	}, []);
 
-	const getEndpoint = useCallback(
-		async (path, method = "GET") => {
-			return await fetch(`https://api.spotify.com/v1/${path}`, {
-				method,
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
-				.then(async (response) => await response.json())
-				.then((json) => {
-					return json;
-				});
-		},
-		[token]
-	);
-
 	const logout = () => {
 		setToken("");
 		window.localStorage.removeItem("token");
@@ -68,55 +59,55 @@ const App = () => {
 	const fetchUserRecentTracks = useCallback(
 		async (limit = 50, timeRange = "long_term", offset = "0") => {
 			const { items } = await getEndpoint(
+				token,
 				`me/player/recently-played?limit=${limit}&offset=${offset}&time_range=${timeRange}`
 			);
 
 			const recentTracks = items.map((item) => {
-				const { artists, name } = item.track;
+				const { artists, name, uri } = item.track;
 				const image = item.track.album.images[0];
 
-				return { artists, name, image };
+				return { artists, name, image, uri };
 			});
 			return recentTracks;
 		},
-		[getEndpoint]
+		[token]
 	);
 
 	const fetchUserTopTracks = useCallback(
 		async (limit = 50, timeRange = "long_term", offset = "0") => {
 			const { items } = await getEndpoint(
+				token,
 				`me/top/tracks?limit=${limit}&offset=${offset}&time_range=${timeRange}`
 			);
 
 			const topTracks = items.map((item) => {
-				const { artists, id, name } = item;
+				const { artists, id, name, uri } = item;
 				const image = item.album.images[0];
 
-				return { artists, id, name, image };
+				return { artists, id, name, image, uri };
 			});
 			return topTracks;
 		},
-		[getEndpoint]
+		[token]
 	);
 
-	/** Return in form [{image, name, id}, {...}]
-	 *
-	 */
 	const fetchUserTopArtists = useCallback(
 		async (limit = 50, timeRange = "long_term", offset = "0") => {
 			const { items } = await getEndpoint(
+				token,
 				`me/top/artists?limit=${limit}&offset=${offset}&time_range=${timeRange}`
 			);
 
 			const topArtists = items.map((item) => {
 				const image = item.images[0] || undefined;
-				const { name, id } = item;
+				const { name, id, uri } = item;
 
-				return { image, name, id };
+				return { image, name, id, uri };
 			});
 			return topArtists;
 		},
-		[getEndpoint]
+		[token]
 	);
 
 	// Return the correct type of items based on the currentItemType
@@ -133,7 +124,11 @@ const App = () => {
 		}
 	};
 
-	console.log(getItems());
+	const addItemsToPlaylist = async (playlistId, songItems) => {
+		const uris = songItems.map(({ uri }) => uri);
+
+		return await addSongsToPlaylist(token, playlistId, uris);
+	};
 
 	useEffect(() => {
 		if (token) {
@@ -141,6 +136,7 @@ const App = () => {
 				setRecentTracks(await fetchUserRecentTracks());
 				setTopArtists(await fetchUserTopArtists());
 				setTopTracks(await fetchUserTopTracks());
+				setUserInfo(await getUserInfo(token));
 			})();
 		}
 	}, [token, fetchUserRecentTracks, fetchUserTopArtists, fetchUserTopTracks]);
@@ -191,7 +187,7 @@ const App = () => {
 						backgroundColor: "turquoise",
 					}}
 				></div>
-
+				{/* TODO Show more song info on hover/focus  */}
 				<div className="page-body">
 					{recentTracks && recentTracks.length && (
 						<SpotifyItemList
