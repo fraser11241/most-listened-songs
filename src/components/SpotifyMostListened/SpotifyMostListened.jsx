@@ -1,187 +1,187 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 
-import Navbar from "../Navbar";
 import { SpotifyItemTypes } from "../../enums/SpotifyItemTypes";
 import {
-	fetchUserInfo,
-	fetchUserRecentTracks,
-	fetchUserTopArtists,
-	fetchUserTopTracks,
+    fetchUserInfo,
+    fetchUserRecentTracks,
+    fetchUserTopArtists,
+    fetchUserTopTracks,
 } from "../../requests/userInfo";
 import {
-	createEmptyPlaylist as requestCreateEmptyPlaylist,
-	addSongsToPlaylist as requestAddSongsToPlaylist,
-	addTopSongsFromArtistsToPlaylist as requestAddTopSongsFromArtistsToPlaylist,
+    createEmptyPlaylist as requestCreateEmptyPlaylist,
+    addSongsToPlaylist as requestAddSongsToPlaylist,
+    addTopSongsFromArtistsToPlaylist as requestAddTopSongsFromArtistsToPlaylist,
 } from "../../requests/playlist";
 import { callFunctionAndHandleErrors } from "../../requests/fetch";
-import "./SpotifyMostListened.css";
+import "./SpotifyMostListened.scss";
 
 import loginContext from "../LoginHandler/LoginContext";
-import SpotifyItemList from "../SpotifyItemList";
+import SpotifyItemList from "../SpotifyItemList/SpotifyItemList";
+import CreatePlaylistNavbar from "../CreatePlaylistNavbar/CreatePlaylistNavbar";
+import Sidenav from "../Sidenav/Sidenav";
 
 const PLAYLIST_NAME = "API Playlist",
-	PLAYLIST_DESC = "Playlist description";
+    PLAYLIST_DESC = "Playlist description";
 
 const SpotifyMostListened = () => {
-	const [recentTracks, setRecentTracks] = useState([]);
-	const [topArtists, setTopArtists] = useState([]);
-	const [topTracks, setTopTracks] = useState([]);
-	const [userInfo, setUserInfo] = useState([]);
-	const [currentItemType, setCurrentItemType] = useState(0);
-	const [isErrorFetching, setIsErrorFetching] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
+    const [recentTracks, setRecentTracks] = useState([]);
+    const [topArtists, setTopArtists] = useState([]);
+    const [topTracks, setTopTracks] = useState([]);
+    const [userInfo, setUserInfo] = useState([]);
+    const [currentItemType, setCurrentItemType] = useState(0);
+    const [isErrorFetching, setIsErrorFetching] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
-	const { token } = useContext(loginContext);
+    const { token } = useContext(loginContext);
 
-	// Return the correct type of items based on the currentItemType
-	const getCurrentSpotifyItems = () => {
-		switch (currentItemType) {
-			case SpotifyItemTypes.RECENT_TRACK:
-				return recentTracks;
-			case SpotifyItemTypes.ARTIST:
-				return topArtists;
-			case SpotifyItemTypes.TOP_TRACK:
-				return topTracks;
-			default:
-				return null;
-		}
-	};
+    // Return the correct type of items based on the currentItemType
+    const getCurrentSpotifyItems = () => {
+        switch (currentItemType) {
+            case SpotifyItemTypes.RECENT_TRACK:
+                return recentTracks;
+            case SpotifyItemTypes.ARTIST:
+                return topArtists;
+            case SpotifyItemTypes.TOP_TRACK:
+                return topTracks;
+            default:
+                return null;
+        }
+    };
 
-	const getCurrentSpotifyItemsWithoutDuplicates = () => {
-		const setOfNames = new Set();
-		return getCurrentSpotifyItems().reduce((arr, value) => {
-			if (setOfNames.has(value.name)) {
-				return arr;
-			}
+    const getCurrentSpotifyItemsCategoryText = () => {
+        switch (currentItemType) {
+            case SpotifyItemTypes.RECENT_TRACK:
+                return "Recent Tracks";
+            case SpotifyItemTypes.ARTIST:
+                return "Top Artists";
+            case SpotifyItemTypes.TOP_TRACK:
+                return "Top Tracks";
+            default:
+                return "null";
+        }
+    }
 
-			setOfNames.add(value.name);
-			return [...arr, value];
-		}, []);
-	};
+    const getCurrentSpotifyItemsWithoutDuplicates = () => {
+        const setOfNames = new Set();
+        return getCurrentSpotifyItems().reduce((arr, value) => {
+            if (setOfNames.has(value.name)) {
+                return arr;
+            }
 
-	const addItemsToPlaylist = async (playlistId, songItems) => {
-		let uris = songItems.map(({ uri }) => uri);
-		return await requestAddSongsToPlaylist(token, playlistId, uris);
-	};
+            setOfNames.add(value.name);
+            return [...arr, value];
+        }, []);
+    };
 
-	const createEmptyPlaylist = async (isPublic = true) =>
-		await requestCreateEmptyPlaylist(
-			token,
-			userInfo.id,
-			PLAYLIST_NAME,
-			PLAYLIST_DESC,
-			isPublic
-		);
+    const addItemsToPlaylist = async (playlistId, songItems) => {
+        let uris = songItems.map(({ uri }) => uri);
+        return await requestAddSongsToPlaylist(token, playlistId, uris);
+    };
 
-	const createPlaylistFromCurrent = async () => {
-		const { id: createdPlaylistId } = await createEmptyPlaylist();
+    const createEmptyPlaylist = async (isPublic = true) =>
+        await requestCreateEmptyPlaylist(
+            token,
+            userInfo.id,
+            PLAYLIST_NAME,
+            PLAYLIST_DESC,
+            isPublic
+        );
 
-		if (currentItemType === SpotifyItemTypes.ARTIST) {
-			const numArtists = 10;
-			const numSongsFromArtist = 5;
+    const createPlaylistFromCurrent = async () => {
+        const { id: createdPlaylistId } = await createEmptyPlaylist();
 
-			const artistIds = topArtists
-				.slice(0, numArtists)
-				.map(({ id }) => id);
+        if (currentItemType === SpotifyItemTypes.ARTIST) {
+            const numArtists = 10;
+            const numSongsFromArtist = 5;
 
-			requestAddTopSongsFromArtistsToPlaylist(
-				token,
-				createdPlaylistId,
-				artistIds,
-				numSongsFromArtist
-			);
-		} else if (
-			currentItemType === SpotifyItemTypes.RECENT_TRACK ||
-			currentItemType === SpotifyItemTypes.TOP_TRACK
-		) {
-			addItemsToPlaylist(
-				createdPlaylistId,
-				getCurrentSpotifyItemsWithoutDuplicates()
-			);
-		}
-	};
+            const artistIds = topArtists
+                .slice(0, numArtists)
+                .map(({ id }) => id);
 
-	const handleFetchingError = (e) => {
-		setIsErrorFetching(true);
-		setErrorMessage("There was an error fetching user info.");
-	};
+            requestAddTopSongsFromArtistsToPlaylist(
+                token,
+                createdPlaylistId,
+                artistIds,
+                numSongsFromArtist
+            );
+        } else if (
+            currentItemType === SpotifyItemTypes.RECENT_TRACK ||
+            currentItemType === SpotifyItemTypes.TOP_TRACK
+        ) {
+            addItemsToPlaylist(
+                createdPlaylistId,
+                getCurrentSpotifyItemsWithoutDuplicates()
+            );
+        }
+    };
 
-	useEffect(() => {
-		if (token) {
-			const getUserInfo = async () => {
-				setRecentTracks(await fetchUserRecentTracks(token));
-				setTopArtists(await fetchUserTopArtists(token));
-				setTopTracks(await fetchUserTopTracks(token));
-				setUserInfo(await fetchUserInfo(token));
-			};
+    const handleFetchingError = (e) => {
+        setIsErrorFetching(true);
+        setErrorMessage("There was an error fetching user info.");
+    };
 
-			callFunctionAndHandleErrors(getUserInfo, handleFetchingError);
-		}
-	}, [token]);
+    useEffect(() => {
+        if (token) {
+            const getUserInfo = async () => {
+                setRecentTracks(await fetchUserRecentTracks(token));
+                setTopArtists(await fetchUserTopArtists(token));
+                setTopTracks(await fetchUserTopTracks(token));
+                setUserInfo(await fetchUserInfo(token));
+            };
 
-	return (
-		<div className="page with-sidenav">
-			{token && (
-				<>
-					<Navbar
-						buttons={[
-							{
-								text: "Recently listened tracks",
-								onClick: () =>
-									setCurrentItemType(
-										SpotifyItemTypes.RECENT_TRACK
-									),
-							},
-							{
-								text: "Most listened artists",
-								onClick: () =>
-									setCurrentItemType(SpotifyItemTypes.ARTIST),
-							},
-							{
-								text: "Most listened songs",
-								onClick: () =>
-									setCurrentItemType(
-										SpotifyItemTypes.TOP_TRACK
-									),
-							},
-						]}
-					/>
-				</>
-			)}
+            callFunctionAndHandleErrors(getUserInfo, handleFetchingError);
+        }
+    }, [token]);
 
-			<div className="page-content">
-				<div
-					className="page-header"
-					style={{
-						width: "100%",
-						height: "125px",
-						backgroundColor: "turquoise",
-					}}
-				></div>
+    return (
+        <div className="page">
+            <Sidenav>
+                <button
+                    onClick={() =>
+                        setCurrentItemType(SpotifyItemTypes.RECENT_TRACK)
+                    }
+                >
+                    Recently listened tracks
+                </button>
+                <button onClick={() => setCurrentItemType(SpotifyItemTypes.ARTIST)}>
+                    Most listened artists
+                </button>
+                <button
+                    onClick={() => setCurrentItemType(SpotifyItemTypes.TOP_TRACK)}
+                >
+                    Most listened songs
+                </button>
+            </Sidenav>
 
-				{/* TODO Show more song info on hover/focus  */}
-				{isErrorFetching ? (
-					errorMessage
-				) : (
-					<div className="page-body">
-						<button
-							onClick={async () =>
-								await createPlaylistFromCurrent()
-							}
-						>
-							CREATE PLAYLIST
-						</button>
-						{recentTracks && recentTracks.length && (
-							<SpotifyItemList
-								items={getCurrentSpotifyItemsWithoutDuplicates()}
-								type={currentItemType}
-							/>
-						)}
-					</div>
-				)}
-			</div>
-		</div>
-	);
+
+
+            <div className="page-content">
+                {isErrorFetching ? (
+                    errorMessage
+                ) : (
+                    <div className="page-body">
+                        {/* <button
+                            onClick={async () =>
+                                await createPlaylistFromCurrent()
+                            }
+                        >
+                            CREATE PLAYLIST
+                        </button> */}
+                        {recentTracks && recentTracks.length && (
+                            <>
+                                <SpotifyItemList
+                                    items={getCurrentSpotifyItemsWithoutDuplicates()}
+                                    title={getCurrentSpotifyItemsCategoryText()}
+                                />
+  
+                            </>
+
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default SpotifyMostListened;

@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./SpotifyItem.css";
+import "./SpotifyItem.scss";
 import "./SpotifyItem.queries.css";
 
 const SpotifyItem = ({ title, subtitle, imageUrl }) => {

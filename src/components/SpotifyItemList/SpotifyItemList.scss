@@ -1,0 +1,21 @@
+.spotify-item-list-container {
+	height: 100%;
+	background-color: var(--content-background-color);
+	border-radius: 6px;
+	padding-top: 20px;
+
+	.spotify-item-list {
+		list-style-type: none;
+		padding: 0 45px;
+
+	
+		li {
+			display: flex;
+			margin: 10px 0;
+		}
+	}
+	
+	
+}
+
+

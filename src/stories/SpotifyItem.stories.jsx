@@ -1,5 +1,5 @@
 import React from "react";
-import SpotifyItem from "../components/SpotifyItem";
+import SpotifyItem from "../components/SpotifyItem/SpotifyItem";
 
 export default {
 	title: "components/SpotifyItem",
