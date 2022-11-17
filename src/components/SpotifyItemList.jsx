@@ -6,6 +6,7 @@ import { SpotifyItemTypes } from "../enums/SpotifyItemTypes";
 import "./SpotifyItemList.css";
 
 const SpotifyItemList = ({ items, type }) => {
+	<h2>Top Items</h2>;
 	const getContentForItem = (item, type) => {
 		if (
 			type === SpotifyItemTypes.RECENT_TRACK ||

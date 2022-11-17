@@ -2,8 +2,7 @@
 	height: 100%;
 	list-style-type: none;
 	background-color: var(--content-background-color);
-	padding: 5px;
-	padding-right: 0;
+	padding: 45px;
 	border-radius: 6px;
 }
 
