@@ -5,7 +5,7 @@ import './CreatePlaylistBottomNav.scss';
 const CreatePlaylistNavbar = ({createPlaylist}) => {
     return (
         <div className="bottom-navbar">
-            <button>
+            <button className="button" onClick={createPlaylist}>
                 Create playlist
             </button>
         </div>

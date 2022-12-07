@@ -1,21 +1,40 @@
 import React from "react";
 
 import "./SpotifyItem.scss";
-import "./SpotifyItem.queries.css";
 
-const SpotifyItem = ({ title, subtitle, imageUrl }) => {
-	return (
-		// <div className="spotify-item-wrapper">
-		<div className="spotify-item-container">
-			<img className="spotify-item-image" src={imageUrl} alt={title} />
+const getContentForItem = (item) => {
+    const showSubtitle = !!item.artists;
 
-			<div className="title-subtitle-wrapper">
-				<span className="title">{title}</span>
-				<span className="subtitle">{subtitle}</span>
-			</div>
-		</div>
-		// </div>
-	);
+    return {
+        imageUrl: item.image.url,
+        title: item.name,
+        ...(showSubtitle && {
+            subtitle: item.artists.map((artist) => artist.name).join(", "),
+        }),
+    };
+};
+
+const SpotifyItem = ({ item, children }) => {
+    const { title, subtitle, imageUrl } = getContentForItem(item);
+
+    return (
+        <div className="box spotify-item-container p-0">
+            <img
+                className="spotify-item-image p-0"
+                src={imageUrl}
+                alt={title}
+            />
+
+            <div className='text-container px-2'>
+                <h3 class={`title is-6 ${subtitle ? 'mb-1' : ''}`}>{title}</h3>
+                {subtitle && (
+                    <p class="subtitle is-6">{subtitle}</p>
+                )}
+            </div>
+
+            {children}
+        </div>
+    );
 };
 
 export default SpotifyItem;

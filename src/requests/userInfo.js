@@ -6,7 +6,7 @@ export const fetchUserInfo = async (token) => {
 
 export const fetchUserRecentTracks = async (
 	token,
-	limit = 50,
+	limit = 10,
 	timeRange = "short_term",
 	offset = "0"
 ) => {
@@ -24,6 +24,13 @@ export const fetchUserRecentTracks = async (
 	return recentTracks;
 };
 
+export const getUserTopTrackValues = (item) => {
+	const { artists, id, name, uri } = item;
+	const image = item.album.images[0];
+
+	return { artists, id, name, image, uri };
+}
+
 export const fetchUserTopTracks = async (
 	token,
 	limit = 50,
@@ -36,13 +43,17 @@ export const fetchUserTopTracks = async (
 	);
 
 	const topTracks = items.map((item) => {
-		const { artists, id, name, uri } = item;
-		const image = item.album.images[0];
-
-		return { artists, id, name, image, uri };
+		return getUserTopTrackValues(item);
 	});
 	return topTracks;
 };
+
+export const getUserTopArtistValues = (item) => {
+	const image = item.images[0] || undefined;
+	const { name, id, uri } = item;
+
+	return { image, name, id, uri };
+}
 
 export const fetchUserTopArtists = async (
 	token,
@@ -55,11 +66,6 @@ export const fetchUserTopArtists = async (
 		`me/top/artists?limit=${limit}&offset=${offset}&time_range=${timeRange}`
 	);
 
-	const topArtists = items.map((item) => {
-		const image = item.images[0] || undefined;
-		const { name, id, uri } = item;
-
-		return { image, name, id, uri };
-	});
+	const topArtists = items.map(getUserTopArtistValues);
 	return topArtists;
 };

@@ -1,16 +1,5 @@
-$sidenav-width: 150px;
-
 .sidenav {
-    height: 100%;
-    position: fixed;
-    left: 0;
-    display: flex;
-    width: $sidenav-width;
+    display: inline-flex;
     flex-direction: column;
-    background-color: var(--sidenav-background-color);
-
-    button {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
+    justify-content: center;
 }

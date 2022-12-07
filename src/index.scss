@@ -1,3 +1,6 @@
+html, body, #root {
+	height: 100%
+  }
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -31,38 +34,11 @@ code {
 	padding: 0;
 }
 
-.page-body {
-	padding: 20px 15%;
-}
-
-body {
+html, body, #root {
 	background-color: var(--app-background-color);
-	padding: 0;
-	margin: 0;
 }
 
-/* Button styling */
-button {
-	background-color: #5e5df0;
-	color: #fff;
-	border-radius: 4px;
-	border-style: none;
-	box-sizing: border-box;
-	cursor: pointer;
-	display: inline-block;
-	font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
-	font-size: 16px;
-	font-weight: 700;
-	line-height: 1.5;
-	max-width: none;
-	overflow: hidden;
-	padding: 9px 20px;
-	margin: 10px 0;
-	text-align: center;
-	text-transform: none;
-}
-
-button:focus {
+button:focus-visible {
 	outline: 3px solid black;
 	outline-offset: 2px;
 	opacity: 0.95;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import { SpotifyItemTypes } from "../../enums/SpotifyItemTypes";
 import {
@@ -10,15 +10,16 @@ import {
 import {
     createEmptyPlaylist as requestCreateEmptyPlaylist,
     addSongsToPlaylist as requestAddSongsToPlaylist,
-    addTopSongsFromArtistsToPlaylist as requestAddTopSongsFromArtistsToPlaylist,
+    getTopSongsFromArtists as requestGetTopSongsFromArtists,
 } from "../../requests/playlist";
 import { callFunctionAndHandleErrors } from "../../requests/fetch";
 import "./SpotifyMostListened.scss";
 
 import loginContext from "../LoginHandler/LoginContext";
-import SpotifyItemList from "../SpotifyItemList/SpotifyItemList";
-import CreatePlaylistNavbar from "../CreatePlaylistNavbar/CreatePlaylistNavbar";
-import Sidenav from "../Sidenav/Sidenav";
+import SpotifyItemListPanel from "../SpotifyItemListPanel/SpotifyItemListPanel";
+import PageContainer from "../PageContainer/PageContainer";
+import Navbar from "../Navbar/Navbar";
+import CreatePlaylistModal from "../CreatePlaylistModal/CreatePlaylistModal";
 
 const PLAYLIST_NAME = "API Playlist",
     PLAYLIST_DESC = "Playlist description";
@@ -31,8 +32,14 @@ const SpotifyMostListened = () => {
     const [currentItemType, setCurrentItemType] = useState(0);
     const [isErrorFetching, setIsErrorFetching] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [isCreatePlaylistModalOpen, setIsCreatePlaylistModalOpen] =
+        useState(false);
 
     const { token } = useContext(loginContext);
+
+    /*
+        // TODO Handle empty states
+    */
 
     // Return the correct type of items based on the currentItemType
     const getCurrentSpotifyItems = () => {
@@ -59,7 +66,7 @@ const SpotifyMostListened = () => {
             default:
                 return "null";
         }
-    }
+    };
 
     const getCurrentSpotifyItemsWithoutDuplicates = () => {
         const setOfNames = new Set();
@@ -98,7 +105,7 @@ const SpotifyMostListened = () => {
                 .slice(0, numArtists)
                 .map(({ id }) => id);
 
-            requestAddTopSongsFromArtistsToPlaylist(
+            requestGetTopSongsFromArtists(
                 token,
                 createdPlaylistId,
                 artistIds,
@@ -111,6 +118,28 @@ const SpotifyMostListened = () => {
             addItemsToPlaylist(
                 createdPlaylistId,
                 getCurrentSpotifyItemsWithoutDuplicates()
+            );
+        }
+    };
+
+    const getCurrentItemsForPlaylist = () => {
+        if (
+            currentItemType === SpotifyItemTypes.RECENT_TRACK ||
+            currentItemType === SpotifyItemTypes.TOP_TRACK
+        ) {
+            return getCurrentSpotifyItemsWithoutDuplicates();
+        } else if (currentItemType === SpotifyItemTypes.ARTIST) {
+            const numArtists = 10;
+            const numSongsFromArtist = 5;
+
+            const artistIds = topArtists
+                .slice(0, numArtists)
+                .map(({ id }) => id);
+
+            return requestGetTopSongsFromArtists(
+                token,
+                artistIds,
+                numSongsFromArtist
             );
         }
     };
@@ -133,54 +162,39 @@ const SpotifyMostListened = () => {
         }
     }, [token]);
 
-    return (
-        <div className="page">
-            <Sidenav>
-                <button
-                    onClick={() =>
-                        setCurrentItemType(SpotifyItemTypes.RECENT_TRACK)
-                    }
-                >
-                    Recently listened tracks
-                </button>
-                <button onClick={() => setCurrentItemType(SpotifyItemTypes.ARTIST)}>
-                    Most listened artists
-                </button>
-                <button
-                    onClick={() => setCurrentItemType(SpotifyItemTypes.TOP_TRACK)}
-                >
-                    Most listened songs
-                </button>
-            </Sidenav>
+    const showError = isErrorFetching;
+    const showItemList =
+        !isErrorFetching && recentTracks && recentTracks.length;
 
-
-
-            <div className="page-content">
-                {isErrorFetching ? (
-                    errorMessage
-                ) : (
-                    <div className="page-body">
-                        {/* <button
-                            onClick={async () =>
-                                await createPlaylistFromCurrent()
-                            }
-                        >
-                            CREATE PLAYLIST
-                        </button> */}
-                        {recentTracks && recentTracks.length && (
-                            <>
-                                <SpotifyItemList
-                                    items={getCurrentSpotifyItemsWithoutDuplicates()}
-                                    title={getCurrentSpotifyItemsCategoryText()}
-                                />
-  
-                            </>
-
-                        )}
-                    </div>
-                )}
+        return (
+        <PageContainer>
+            <div className="column is-narrow is-desktop">
+                <Navbar setCurrentItemType={setCurrentItemType} />
             </div>
-        </div>
+
+            {showError && (errorMessage || "Error fetching content")}
+            {showItemList && (
+                <div className="column is-10 has-background">
+                    <div className="box content item-list-container">
+                        <SpotifyItemListPanel
+                            items={getCurrentSpotifyItemsWithoutDuplicates()}
+                            title={getCurrentSpotifyItemsCategoryText()}
+                            createPlaylist={() =>
+                                setIsCreatePlaylistModalOpen(true)
+                            }
+                        />
+                    </div>
+                </div>
+            )}
+
+            <CreatePlaylistModal
+                token={token}
+                userId={userInfo.id}
+                isOpen={isCreatePlaylistModalOpen}
+                handleCloseModal={() => setIsCreatePlaylistModalOpen(false)}
+                getCurrentItemsForPlaylist={getCurrentItemsForPlaylist}
+            />
+        </PageContainer>
     );
 };
 

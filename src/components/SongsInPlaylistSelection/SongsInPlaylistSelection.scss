@@ -1,0 +1,49 @@
+.songs-in-playlist-selection {
+    .spotify-item-container {
+        height: 75px;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+}
+
+.spotify-item-checkbox-container {
+    cursor: pointer;
+    
+    input {
+        position: absolute;
+        left: -999px;
+    }
+
+    &:focus-within {
+        .spotify-item-container {
+            outline: 2px solid #333;
+        }
+    }
+
+    &.not-included {
+        .spotify-item-container {
+            box-shadow: inset 0 0 10px #666;
+            background-color: #BBB;
+        }        
+
+        .spotify-item-image {
+            opacity: 0.7;
+        }
+    }
+
+    &.included {
+        .spotify-item-container {
+            box-shadow: 0 0 10px #666;
+        }        
+    }
+
+    .switch {
+        margin-left: auto; // Push to end of spotify-item
+        align-self: center;
+        margin-right: 0.25em;
+    }
+}
+
+.songs-in-playlist-selection {
+    list-style-type: none !important;
+}

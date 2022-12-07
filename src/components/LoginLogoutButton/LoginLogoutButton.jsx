@@ -3,6 +3,7 @@ import React from "react";
 const LoginLogoutButton = ({ isLoggedIn, loginUrl, handleLogout }) => {
 	return isLoggedIn ? (
 		<button
+			className="button"
 			style={{
 				position: "absolute",
 				top: "10px",

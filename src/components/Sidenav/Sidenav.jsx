@@ -1,15 +1,22 @@
-import React from "react";
+import React from 'react';
 
-import "./Sidenav.scss";
+import './Sidenav.scss';
 
-const Sidenav = ({ children }) => {
+const Sidenav = ({buttonContents, buttonOnClicks}) => {
     return (
-        <>
-            <div className="sidenav">
-                    {children}
-            </div>
-        </>
-    );
-};
+        <div className="sidenav">
+            {buttonContents.map(
+                (buttonText, index) => (
+                    <button
+                        className="button"
+                        onClick={buttonOnClicks[index]}
+                    >
+                        {buttonText}
+                    </button>
+                )
+            )}
+        </div>
+    )
+}
 
 export default Sidenav;

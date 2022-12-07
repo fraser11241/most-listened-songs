@@ -1,0 +1,9 @@
+.modal-card {
+    height: 100%; // Always take the max-height
+
+    &-foot {
+        // Push buttons to edges
+        justify-content: space-between; 
+    }
+
+}
