@@ -1,4 +1,11 @@
 import { getEndpoint } from "./fetch";
+import { TimeRanges } from "../enums/enums";
+
+const timeRangeQueries = {
+	[TimeRanges.SHORT_TERM]: 'short_term',
+	[TimeRanges.MEDIUM_TERM]: 'medium_term',
+	[TimeRanges.LONG_TERM]: 'long_term',
+}
 
 export const fetchUserInfo = async (token) => {
 	return await getEndpoint(token, "me");
@@ -6,13 +13,12 @@ export const fetchUserInfo = async (token) => {
 
 export const fetchUserRecentTracks = async (
 	token,
-	limit = 10,
-	timeRange = "short_term",
+	limit = 50,
 	offset = "0"
 ) => {
 	const { items } = await getEndpoint(
 		token,
-		`me/player/recently-played?limit=${limit}&offset=${offset}&time_range=${timeRange}`
+		`me/player/recently-played?limit=${limit}&offset=${offset}`
 	);
 
 	const recentTracks = items.map((item) => {
@@ -33,13 +39,13 @@ export const getUserTopTrackValues = (item) => {
 
 export const fetchUserTopTracks = async (
 	token,
+	timeRange = TimeRanges.SHORT_TERM,
 	limit = 50,
-	timeRange = "short_term",
 	offset = "0"
 ) => {
 	const { items } = await getEndpoint(
 		token,
-		`me/top/tracks?limit=${limit}&offset=${offset}&time_range=${timeRange}`
+		`me/top/tracks?limit=${limit}&offset=${offset}&time_range=${timeRangeQueries[timeRange]}`
 	);
 
 	const topTracks = items.map((item) => {
@@ -57,13 +63,13 @@ export const getUserTopArtistValues = (item) => {
 
 export const fetchUserTopArtists = async (
 	token,
+	timeRange = TimeRanges.SHORT_TERM,
 	limit = 25,
-	timeRange = "long_term",
 	offset = "0"
 ) => {
 	const { items } = await getEndpoint(
 		token,
-		`me/top/artists?limit=${limit}&offset=${offset}&time_range=${timeRange}`
+		`me/top/artists?limit=${limit}&offset=${offset}&time_range=${timeRangeQueries[timeRange]}`
 	);
 
 	const topArtists = items.map(getUserTopArtistValues);

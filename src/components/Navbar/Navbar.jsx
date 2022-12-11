@@ -2,23 +2,60 @@ import React from 'react';
 
 import './Navbar.scss';
 
-import {SpotifyItemTypes} from '../../enums/SpotifyItemTypes';
+import {SpotifyItemTypes, TimeRanges} from '../../enums/enums';
 
-const Navbar = ({setCurrentItemType}) => {
+const Navbar = ({currentItemType, setCurrentItemType, currentTimeRange, setCurrentTimeRange}) => {
+    const itemTypeText = {
+        [SpotifyItemTypes.RECENT_TRACK]: 'Recent tracks',
+        [SpotifyItemTypes.ARTIST]: 'Top artists',
+        [SpotifyItemTypes.TOP_TRACK]: 'Top tracks',
+    }
+    const timeRangeText = {
+        [TimeRanges.SHORT_TERM]: 'Past month',
+        [TimeRanges.MEDIUM_TERM]: 'Past 6 months',
+        [TimeRanges.LONG_TERM]: 'Long term'
+    }
+    console.log(currentItemType, currentTimeRange)
+    /*
+
+             <button 
+                        className={`button time-range ${timeRange === currentTimeRange ? 'is-current': ''} is-size-5`}
+                        onClick={() => setCurrentTimeRange(timeRange)}
+                    >
+                        {timeRangeText[timeRange]}
+                    </button>
+    */
     return (
         <aside class="menu sidebar">
-            <p class="menu-label">Label here</p>
+            <p class="menu-label has-text-centered is-size-6 mb-0">Label here</p>
             <ul class="menu-list">
-                <li>
-                    <button className="button" onClick={() => setCurrentItemType(SpotifyItemTypes.RECENT_TRACK)}>Recent Tracks</button>
-                </li>
-                <li>
-                    <button className="button" onClick={() => setCurrentItemType(SpotifyItemTypes.ARTIST)}>Top Artists</button>
-                </li>
-                <li>
-                    <button className="button" onClick={() => setCurrentItemType(SpotifyItemTypes.TOP_TRACK)}>Top Tracks</button>
-                </li>
+                {Object.values(SpotifyItemTypes).map(itemType => (
+                    <li>
+                        <button 
+                            className={`button ${itemType === currentItemType ? 'is-current': ''}`}
+                            onClick={() => setCurrentItemType(itemType)}
+                        >
+                            {itemTypeText[itemType]}
+                        </button>
+                    </li>
+                ))}
             </ul>
+
+            <p class="menu-label has-text-centered is-size-6 mb-0">Time range</p>
+            <ul class="menu-list">
+                {Object.values(TimeRanges).map(timeRange => (
+                    <li>
+                        <button 
+                            className={`button ${timeRange === currentTimeRange ? 'is-current': ''}`}
+                            onClick={() => setCurrentTimeRange(timeRange)}
+                        >
+                            {timeRangeText[timeRange]}
+                        </button>
+                    </li>
+                ))}
+            </ul>
+
+            
         </aside>
     );
 };

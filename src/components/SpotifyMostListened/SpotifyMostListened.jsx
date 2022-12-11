@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import { SpotifyItemTypes } from "../../enums/SpotifyItemTypes";
+import { SpotifyItemTypes, TimeRanges } from "../../enums/enums";
 import {
     fetchUserInfo,
     fetchUserRecentTracks,
@@ -30,6 +30,7 @@ const SpotifyMostListened = () => {
     const [topTracks, setTopTracks] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
     const [currentItemType, setCurrentItemType] = useState(0);
+    const [currentTimeRange, setCurrentTimeRange] = useState(TimeRanges.LONG_TERM)
     const [isErrorFetching, setIsErrorFetching] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [isCreatePlaylistModalOpen, setIsCreatePlaylistModalOpen] =
@@ -94,34 +95,6 @@ const SpotifyMostListened = () => {
             isPublic
         );
 
-    const createPlaylistFromCurrent = async () => {
-        const { id: createdPlaylistId } = await createEmptyPlaylist();
-
-        if (currentItemType === SpotifyItemTypes.ARTIST) {
-            const numArtists = 10;
-            const numSongsFromArtist = 5;
-
-            const artistIds = topArtists
-                .slice(0, numArtists)
-                .map(({ id }) => id);
-
-            requestGetTopSongsFromArtists(
-                token,
-                createdPlaylistId,
-                artistIds,
-                numSongsFromArtist
-            );
-        } else if (
-            currentItemType === SpotifyItemTypes.RECENT_TRACK ||
-            currentItemType === SpotifyItemTypes.TOP_TRACK
-        ) {
-            addItemsToPlaylist(
-                createdPlaylistId,
-                getCurrentSpotifyItemsWithoutDuplicates()
-            );
-        }
-    };
-
     const getCurrentItemsForPlaylist = () => {
         if (
             currentItemType === SpotifyItemTypes.RECENT_TRACK ||
@@ -150,11 +123,24 @@ const SpotifyMostListened = () => {
     };
 
     useEffect(() => {
+        if (token && currentItemType === SpotifyItemTypes.ARTIST || currentItemType === SpotifyItemTypes.TOP_TRACK) {
+            const getUserInfo = async () => {
+                setRecentTracks(await fetchUserRecentTracks(token));
+                setTopArtists(await fetchUserTopArtists(token, currentTimeRange));
+                setTopTracks(await fetchUserTopTracks(token, currentTimeRange));
+                setUserInfo(await fetchUserInfo(token));
+            };
+
+            callFunctionAndHandleErrors(getUserInfo, handleFetchingError);
+        }
+    }, [currentTimeRange]);
+
+    useEffect(() => {
         if (token) {
             const getUserInfo = async () => {
                 setRecentTracks(await fetchUserRecentTracks(token));
-                setTopArtists(await fetchUserTopArtists(token));
-                setTopTracks(await fetchUserTopTracks(token));
+                setTopArtists(await fetchUserTopArtists(token, currentTimeRange));
+                setTopTracks(await fetchUserTopTracks(token, currentTimeRange));
                 setUserInfo(await fetchUserInfo(token));
             };
 
@@ -168,8 +154,13 @@ const SpotifyMostListened = () => {
 
         return (
         <PageContainer>
-            <div className="column is-narrow is-desktop">
-                <Navbar setCurrentItemType={setCurrentItemType} />
+            <div className="column is-narrow is-desktop p-0">
+                <Navbar 
+                    currentItemType={currentItemType}
+                    currentTimeRange={currentTimeRange}
+                    setCurrentItemType={setCurrentItemType} 
+                    setCurrentTimeRange={setCurrentTimeRange} 
+                />
             </div>
 
             {showError && (errorMessage || "Error fetching content")}
@@ -179,6 +170,8 @@ const SpotifyMostListened = () => {
                         <SpotifyItemListPanel
                             items={getCurrentSpotifyItemsWithoutDuplicates()}
                             title={getCurrentSpotifyItemsCategoryText()}
+                            currentTimeRange={currentTimeRange}
+                            setCurrentTimeRange={setCurrentTimeRange}
                             createPlaylist={() =>
                                 setIsCreatePlaylistModalOpen(true)
                             }
