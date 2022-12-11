@@ -5,7 +5,6 @@ import {createPlaylistFromSpotifyItems} from '../../requests/playlist';
 
 import './CreatePlaylistModal.scss';
 import TextField from "../TextField/TextField";
-import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 
 const CreatePlaylistModal = ({token, userId, isOpen, handleCloseModal, getCurrentItemsForPlaylist}) => {
     const [itemsInPlaylist, setItemsInPlaylist] = useState();
@@ -44,6 +43,17 @@ const CreatePlaylistModal = ({token, userId, isOpen, handleCloseModal, getCurren
         )
     }
 
+    const deselectAll = () => {
+        setItemsInPlaylist(
+            itemsInPlaylist.map(item => {
+                return {
+                    ...item,
+                    isIncludedInPlaylist: false
+                }
+            })
+        )
+    }
+
     useEffect(() => {
         if(isOpen) {
             Promise.resolve(getCurrentItemsForPlaylist()).then(items => {
@@ -58,7 +68,7 @@ const CreatePlaylistModal = ({token, userId, isOpen, handleCloseModal, getCurren
     }, [isOpen, getCurrentItemsForPlaylist]);
 
     return (
-        <div className={`modal ${isOpen ? 'is-active': ''}`}>
+        <div className={`modal create-playlist-modal ${isOpen ? 'is-active': ''}`}>
             <div className="modal-background" />
             <form className="modal-card" onSubmit={handleSubmit}> 
                 <header className="modal-card-head">
@@ -82,7 +92,12 @@ const CreatePlaylistModal = ({token, userId, isOpen, handleCloseModal, getCurren
 
                     <Accordion>
                         {
-                            itemsInPlaylist && <SongsInPlaylistSelection itemsInPlaylist={itemsInPlaylist} toggleIsIncludedInPlaylist={toggleIsIncludedInPlaylist} />
+                            itemsInPlaylist && 
+                                <SongsInPlaylistSelection 
+                                    itemsInPlaylist={itemsInPlaylist} 
+                                    toggleIsIncludedInPlaylist={toggleIsIncludedInPlaylist} 
+                                    deselectAll={deselectAll}
+                                />
                         }
                     </Accordion>
                 </section>

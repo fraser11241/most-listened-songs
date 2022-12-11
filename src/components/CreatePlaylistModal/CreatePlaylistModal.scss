@@ -1,9 +1,16 @@
-.modal-card {
-    height: 100%; // Always take the max-height
-
-    &-foot {
-        // Push buttons to edges
-        justify-content: space-between; 
+.create-playlist-modal {
+    .accordion-content {
+        padding-top: 0.5em
     }
 
+    .modal-card {
+        height: 100%; // Always take the max-height
+    
+        &-foot {
+            // Push buttons to edges
+            justify-content: space-between; 
+        }
+    }
+    
 }
+
