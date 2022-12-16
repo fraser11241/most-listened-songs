@@ -9,3 +9,8 @@ export const TimeRanges = Object.freeze({
     MEDIUM_TERM: 1,
 	SHORT_TERM: 0,
 });
+
+export const MessageState = Object.freeze({
+	ERROR: 0,
+	SUCCESS: 1
+});

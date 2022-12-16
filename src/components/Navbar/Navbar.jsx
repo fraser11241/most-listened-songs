@@ -15,16 +15,7 @@ const Navbar = ({currentItemType, setCurrentItemType, currentTimeRange, setCurre
         [TimeRanges.MEDIUM_TERM]: 'Past 6 months',
         [TimeRanges.LONG_TERM]: 'Long term'
     }
-    console.log(currentItemType, currentTimeRange)
-    /*
 
-             <button 
-                        className={`button time-range ${timeRange === currentTimeRange ? 'is-current': ''} is-size-5`}
-                        onClick={() => setCurrentTimeRange(timeRange)}
-                    >
-                        {timeRangeText[timeRange]}
-                    </button>
-    */
     return (
         <aside class="menu sidebar">
             <p class="menu-label has-text-centered is-size-6 mb-0">Label here</p>

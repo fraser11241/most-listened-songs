@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import { SpotifyItemTypes, TimeRanges } from "../../enums/enums";
+import { SpotifyItemTypes, TimeRanges, MessageState } from "../../enums/enums";
 import {
     fetchUserInfo,
     fetchUserRecentTracks,
@@ -20,6 +20,7 @@ import SpotifyItemListPanel from "../SpotifyItemListPanel/SpotifyItemListPanel";
 import PageContainer from "../PageContainer/PageContainer";
 import Navbar from "../Navbar/Navbar";
 import CreatePlaylistModal from "../CreatePlaylistModal/CreatePlaylistModal";
+import Message from "../Message/Message";
 
 const PLAYLIST_NAME = "API Playlist",
     PLAYLIST_DESC = "Playlist description";
@@ -30,11 +31,18 @@ const SpotifyMostListened = () => {
     const [topTracks, setTopTracks] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
     const [currentItemType, setCurrentItemType] = useState(0);
-    const [currentTimeRange, setCurrentTimeRange] = useState(TimeRanges.LONG_TERM)
+    const [currentTimeRange, setCurrentTimeRange] = useState(
+        TimeRanges.LONG_TERM
+    );
     const [isErrorFetching, setIsErrorFetching] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [isCreatePlaylistModalOpen, setIsCreatePlaylistModalOpen] =
         useState(false);
+    const [messageToShow, setMessageToShow] = useState({
+        message: "MESSAGE TEXT HERE",
+        state: MessageState.SUCCESS,
+        /* message: String, status: MessageState */
+    });
 
     const { token } = useContext(loginContext);
 
@@ -122,44 +130,48 @@ const SpotifyMostListened = () => {
         setErrorMessage("There was an error fetching user info.");
     };
 
-    useEffect(() => {
-        if (token && currentItemType === SpotifyItemTypes.ARTIST || currentItemType === SpotifyItemTypes.TOP_TRACK) {
-            const getUserInfo = async () => {
-                setRecentTracks(await fetchUserRecentTracks(token));
-                setTopArtists(await fetchUserTopArtists(token, currentTimeRange));
-                setTopTracks(await fetchUserTopTracks(token, currentTimeRange));
-                setUserInfo(await fetchUserInfo(token));
-            };
+    const clearMessageAfterTime = (timeToWait) => {
+        setTimeout(() => {
+            if (messageToShow) {
+                setMessageToShow({});
+            }
+        }, timeToWait);
+    };
 
-            callFunctionAndHandleErrors(getUserInfo, handleFetchingError);
-        }
-    }, [currentTimeRange]);
+    const showMessage = (message, state = MessageState.SUCCESS) => {
+        const timeToShowMessage = 15000;
+
+        setMessageToShow({ message, state });
+        clearMessageAfterTime(timeToShowMessage);
+    };
 
     useEffect(() => {
         if (token) {
             const getUserInfo = async () => {
                 setRecentTracks(await fetchUserRecentTracks(token));
-                setTopArtists(await fetchUserTopArtists(token, currentTimeRange));
+                setTopArtists(
+                    await fetchUserTopArtists(token, currentTimeRange)
+                );
                 setTopTracks(await fetchUserTopTracks(token, currentTimeRange));
                 setUserInfo(await fetchUserInfo(token));
             };
 
             callFunctionAndHandleErrors(getUserInfo, handleFetchingError);
         }
-    }, [token]);
+    }, [token, currentTimeRange]);
 
     const showError = isErrorFetching;
     const showItemList =
         !isErrorFetching && recentTracks && recentTracks.length;
 
-        return (
+    return (
         <PageContainer>
             <div className="column is-narrow is-desktop p-0">
-                <Navbar 
+                <Navbar
                     currentItemType={currentItemType}
                     currentTimeRange={currentTimeRange}
-                    setCurrentItemType={setCurrentItemType} 
-                    setCurrentTimeRange={setCurrentTimeRange} 
+                    setCurrentItemType={setCurrentItemType}
+                    setCurrentTimeRange={setCurrentTimeRange}
                 />
             </div>
 
@@ -176,6 +188,8 @@ const SpotifyMostListened = () => {
                                 setIsCreatePlaylistModalOpen(true)
                             }
                         />
+
+                     
                     </div>
                 </div>
             )}
@@ -186,6 +200,7 @@ const SpotifyMostListened = () => {
                 isOpen={isCreatePlaylistModalOpen}
                 handleCloseModal={() => setIsCreatePlaylistModalOpen(false)}
                 getCurrentItemsForPlaylist={getCurrentItemsForPlaylist}
+                showMessage={showMessage}
             />
         </PageContainer>
     );
