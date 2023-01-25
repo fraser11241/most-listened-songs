@@ -80,24 +80,22 @@ export const createPlaylistFromSpotifyItems = async (
     spotifyItems,
     isPublic = true
 ) => {
-    const {id: playlistId} = await createEmptyPlaylist(
-        token,
-        userId,
-        playlistName,
-        playlistDescription,
-        isPublic
-    )
-        .catch(e => {
-			console.log(e);
-			return null;
-		});
+    
+        const {id: playlistId} = await createEmptyPlaylist(
+            token,
+            userId,
+            playlistName,
+            playlistDescription,
+            isPublic
+        );
+    
+        if(!playlistId) {
+            return false;
+        }
+    
+        const uris = spotifyItems.map(({uri}) => uri);
+        const {snapshot_id} = await addSongsToPlaylist(token, playlistId, uris);
+    
+        return !!snapshot_id;
 
-	if(!playlistId) {
-		return false;
-	}
-
-	const uris = spotifyItems.map(({uri}) => uri);
-	const {snapshot_id} = await addSongsToPlaylist(token, playlistId, uris);
-
-	return !!snapshot_id;
 };

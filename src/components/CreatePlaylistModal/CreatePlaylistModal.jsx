@@ -12,7 +12,6 @@ import "./CreatePlaylistModal.scss";
 const CreatePlaylistModal = ({
     token,
     userId,
-    isOpen,
     handleCloseModal,
     getCurrentItemsForPlaylist,
     showMessage,
@@ -21,38 +20,43 @@ const CreatePlaylistModal = ({
     const [playlistName, setPlaylistName] = useState("Playlist Name");
     const [playlistDescription, setPlaylistDescription] = useState("");
 
-    /**
-     * // TODO Add input fields for name
-     */
-    const handleSubmit = () => {
-        const spotifyItemsToIncludeInPlaylist = itemsInPlaylist.reduce(
-            (arr, { item, isIncludedInPlaylist }) => {
-                if (isIncludedInPlaylist) {
-                    return [...arr, item];
-                } else {
-                    return arr;
-                }
-            },
-            []
-        );
-
-        const playlistCreated = createPlaylistFromSpotifyItems(
-            token,
-            userId,
-            playlistName || "Playlist Name",
-            playlistDescription || "",
-            spotifyItemsToIncludeInPlaylist
-        );
-
-        if (playlistCreated) {
-            showMessage("Created playlist sucessfully");
-        } else {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        try {
+            const spotifyItemsToIncludeInPlaylist = itemsInPlaylist.reduce(
+                (arr, { item, isIncludedInPlaylist }) => {
+                    if (isIncludedInPlaylist) {
+                        return [...arr, item];
+                    } else {
+                        return arr;
+                    }
+                },
+                []
+            );
+    
+            const playlistCreated = await createPlaylistFromSpotifyItems(
+                token,
+                userId,
+                playlistName || "Playlist Name",
+                playlistDescription || "",
+                spotifyItemsToIncludeInPlaylist
+            );
+    
+            if (playlistCreated) {
+                showMessage("Playlist created sucessfully");
+            } else {
+                throw new Error("No playlist created")
+            }
+        }
+        catch (e) {
+            console.error(e);
             showMessage("Error creating playlist", MessageState.ERROR);
         }
         handleCloseModal();
     };
 
-    const toggleIsIncludedInPlaylist = (index) => {
+    const toggleIsIncludedInPlaylist = (index) => {        
         setItemsInPlaylist(
             itemsInPlaylist.map((item, itemIndex) => {
                 if (itemIndex !== index) {
@@ -79,26 +83,33 @@ const CreatePlaylistModal = ({
         );
     };
 
+    const selectAll = () => {
+        setItemsInPlaylist(
+            itemsInPlaylist.map((item) => {
+                return {
+                    ...item,
+                    isIncludedInPlaylist: true,
+                };
+            })
+        );
+    };
+
     useEffect(() => {
-        if (isOpen) {
-            Promise.resolve(getCurrentItemsForPlaylist()).then((items) => {
-                setItemsInPlaylist(
-                    items.map((item) => {
-                        return {
-                            item,
-                            isIncludedInPlaylist: true,
-                        };
-                    })
-                );
-            });
-        }
-    }, [isOpen, getCurrentItemsForPlaylist]);
+        Promise.resolve(getCurrentItemsForPlaylist()).then((items) => {
+            setItemsInPlaylist(
+                items.map((item) => {
+                    return {
+                        item,
+                        isIncludedInPlaylist: true,
+                    };
+                })
+            );
+        });
+    }, [getCurrentItemsForPlaylist]);
 
     return (
         <div
-            className={`modal create-playlist-modal ${
-                isOpen ? "is-active" : ""
-            }`}
+            className='modal create-playlist-modal is-active'
         >
             <div className="modal-background" />
             <form className="modal-card" onSubmit={handleSubmit}>
@@ -111,7 +122,7 @@ const CreatePlaylistModal = ({
                         aria-label="close"
                         onClick={handleCloseModal}
                         type="button"
-                    ></button>
+                    />
                 </header>
 
                 <section class="modal-card-body">
@@ -128,7 +139,7 @@ const CreatePlaylistModal = ({
                         setValue={(e) => setPlaylistDescription(e.target.value)}
                     />
 
-                    <Accordion>
+                    <Accordion isOpenByDefault={true}>
                         {itemsInPlaylist && (
                             <SongsInPlaylistSelection
                                 itemsInPlaylist={itemsInPlaylist}
@@ -136,6 +147,7 @@ const CreatePlaylistModal = ({
                                     toggleIsIncludedInPlaylist
                                 }
                                 deselectAll={deselectAll}
+                                selectAll={selectAll}
                             />
                         )}
                     </Accordion>

@@ -1,15 +1,9 @@
-const genericErrorHandler = (response) => {
+export const genericErrorHandler = (response) => {
 	if (!response.ok) {
 		throw Error(response.statusText || "Response was not ok");
 	}
 	return response;
 };
-
-export const callFunctionAndHandleErrors = (fn, errorHandler) =>
-	fn().catch((e) => {
-		console.log(e);
-		errorHandler && errorHandler(e);
-	});
 
 // Return an object containg response json and status, or status if error
 export const getEndpoint = async (token, path, method = "GET") => {

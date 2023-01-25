@@ -12,7 +12,6 @@ import {
     addSongsToPlaylist as requestAddSongsToPlaylist,
     getTopSongsFromArtists as requestGetTopSongsFromArtists,
 } from "../../requests/playlist";
-import { callFunctionAndHandleErrors } from "../../requests/fetch";
 import "./SpotifyMostListened.scss";
 
 import loginContext from "../LoginHandler/LoginContext";
@@ -20,10 +19,7 @@ import SpotifyItemListPanel from "../SpotifyItemListPanel/SpotifyItemListPanel";
 import PageContainer from "../PageContainer/PageContainer";
 import Navbar from "../Navbar/Navbar";
 import CreatePlaylistModal from "../CreatePlaylistModal/CreatePlaylistModal";
-import Message from "../Message/Message";
-
-const PLAYLIST_NAME = "API Playlist",
-    PLAYLIST_DESC = "Playlist description";
+import MessageModal from "../MessageModal/MessageModal";
 
 const SpotifyMostListened = () => {
     const [recentTracks, setRecentTracks] = useState([]);
@@ -38,17 +34,9 @@ const SpotifyMostListened = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [isCreatePlaylistModalOpen, setIsCreatePlaylistModalOpen] =
         useState(false);
-    const [messageToShow, setMessageToShow] = useState({
-        message: "MESSAGE TEXT HERE",
-        state: MessageState.SUCCESS,
-        /* message: String, status: MessageState */
-    });
+    const [message, setMessage] = useState({});
 
     const { token } = useContext(loginContext);
-
-    /*
-        // TODO Handle empty states
-    */
 
     // Return the correct type of items based on the currentItemType
     const getCurrentSpotifyItems = () => {
@@ -94,15 +82,6 @@ const SpotifyMostListened = () => {
         return await requestAddSongsToPlaylist(token, playlistId, uris);
     };
 
-    const createEmptyPlaylist = async (isPublic = true) =>
-        await requestCreateEmptyPlaylist(
-            token,
-            userInfo.id,
-            PLAYLIST_NAME,
-            PLAYLIST_DESC,
-            isPublic
-        );
-
     const getCurrentItemsForPlaylist = () => {
         if (
             currentItemType === SpotifyItemTypes.RECENT_TRACK ||
@@ -130,39 +109,42 @@ const SpotifyMostListened = () => {
         setErrorMessage("There was an error fetching user info.");
     };
 
-    const clearMessageAfterTime = (timeToWait) => {
-        setTimeout(() => {
-            if (messageToShow) {
-                setMessageToShow({});
-            }
-        }, timeToWait);
+    const displayMessage = (message, state = MessageState.SUCCESS) => {
+        setMessage({ message, state });
     };
 
-    const showMessage = (message, state = MessageState.SUCCESS) => {
-        const timeToShowMessage = 15000;
-
-        setMessageToShow({ message, state });
-        clearMessageAfterTime(timeToShowMessage);
+    const hideMessage = () => {
+        setMessage({});
     };
 
     useEffect(() => {
         if (token) {
-            const getUserInfo = async () => {
-                setRecentTracks(await fetchUserRecentTracks(token));
-                setTopArtists(
-                    await fetchUserTopArtists(token, currentTimeRange)
-                );
-                setTopTracks(await fetchUserTopTracks(token, currentTimeRange));
-                setUserInfo(await fetchUserInfo(token));
-            };
+            (async () => {
+                try {
+                    setRecentTracks(await fetchUserRecentTracks(token));
+                    setTopArtists(
+                        await fetchUserTopArtists(token, currentTimeRange)
+                    );
+                    setTopTracks(
+                        await fetchUserTopTracks(token, currentTimeRange)
+                    );
+                    setUserInfo(await fetchUserInfo(token));
 
-            callFunctionAndHandleErrors(getUserInfo, handleFetchingError);
+                    if (isErrorFetching) {
+                        setIsErrorFetching(false);
+                    }
+                } catch (e) {
+                    handleFetchingError(e);
+                }
+            })();
         }
     }, [token, currentTimeRange]);
 
     const showError = isErrorFetching;
     const showItemList =
         !isErrorFetching && recentTracks && recentTracks.length;
+    const showMessage =
+        !isCreatePlaylistModalOpen && message && message.message;
 
     return (
         <PageContainer>
@@ -175,7 +157,6 @@ const SpotifyMostListened = () => {
                 />
             </div>
 
-            {showError && (errorMessage || "Error fetching content")}
             {showItemList && (
                 <div className="column is-10 has-background">
                     <div className="box content item-list-container">
@@ -188,20 +169,32 @@ const SpotifyMostListened = () => {
                                 setIsCreatePlaylistModalOpen(true)
                             }
                         />
-
-                     
                     </div>
                 </div>
             )}
 
-            <CreatePlaylistModal
-                token={token}
-                userId={userInfo.id}
-                isOpen={isCreatePlaylistModalOpen}
-                handleCloseModal={() => setIsCreatePlaylistModalOpen(false)}
-                getCurrentItemsForPlaylist={getCurrentItemsForPlaylist}
-                showMessage={showMessage}
-            />
+            {showError && (
+                <div className="column is-10 has-background">
+                    {errorMessage || "Error fetching content"}
+                </div>
+            )}
+
+            {showMessage && (
+                <MessageModal
+                    handleCloseModal={hideMessage}
+                    message={message}
+                />
+            )}
+
+            {isCreatePlaylistModalOpen && (
+                <CreatePlaylistModal
+                    token={token}
+                    userId={userInfo.id}
+                    handleCloseModal={() => setIsCreatePlaylistModalOpen(false)}
+                    getCurrentItemsForPlaylist={getCurrentItemsForPlaylist}
+                    showMessage={displayMessage}
+                />
+            )}
         </PageContainer>
     );
 };

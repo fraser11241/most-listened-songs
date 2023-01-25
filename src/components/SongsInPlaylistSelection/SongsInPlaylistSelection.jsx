@@ -7,11 +7,19 @@ import "./SongsInPlaylistSelection.scss";
 const SongsInPlaylistSelection = ({
     toggleIsIncludedInPlaylist,
     itemsInPlaylist,
-    deselectAll
+    deselectAll,
+    selectAll
 }) => {
     return (
         itemsInPlaylist && (
             <>
+                <button 
+                    className="button is-small mb-1 deselect-all-button"
+                    onClick={selectAll}
+                    type="button"
+                >
+                    Select all
+                </button>
                 <button 
                     className="button is-small mb-1 deselect-all-button"
                     onClick={deselectAll}
