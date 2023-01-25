@@ -8,9 +8,7 @@ import {
     fetchUserTopTracks,
 } from "../../requests/userInfo";
 import {
-    createEmptyPlaylist as requestCreateEmptyPlaylist,
-    addSongsToPlaylist as requestAddSongsToPlaylist,
-    getTopSongsFromArtists as requestGetTopSongsFromArtists,
+    getTopSongsFromArtists,
 } from "../../requests/playlist";
 import "./SpotifyMostListened.scss";
 
@@ -77,11 +75,6 @@ const SpotifyMostListened = () => {
         }, []);
     };
 
-    const addItemsToPlaylist = async (playlistId, songItems) => {
-        let uris = songItems.map(({ uri }) => uri);
-        return await requestAddSongsToPlaylist(token, playlistId, uris);
-    };
-
     const getCurrentItemsForPlaylist = () => {
         if (
             currentItemType === SpotifyItemTypes.RECENT_TRACK ||
@@ -96,7 +89,7 @@ const SpotifyMostListened = () => {
                 .slice(0, numArtists)
                 .map(({ id }) => id);
 
-            return requestGetTopSongsFromArtists(
+            return getTopSongsFromArtists(
                 token,
                 artistIds,
                 numSongsFromArtist
@@ -109,8 +102,14 @@ const SpotifyMostListened = () => {
         setErrorMessage("There was an error fetching user info.");
     };
 
-    const displayMessage = (message, state = MessageState.SUCCESS) => {
-        setMessage({ message, state });
+    const displayMessage = (message, state = MessageState.SUCCESS, modalProps) => {
+        setMessage(
+            { 
+                message, 
+                state,  
+                ...(modalProps || {})
+            }
+        );
     };
 
     const hideMessage = () => {
@@ -144,7 +143,7 @@ const SpotifyMostListened = () => {
     const showItemList =
         !isErrorFetching && recentTracks && recentTracks.length;
     const showMessage =
-        !isCreatePlaylistModalOpen && message && message.message;
+        !isCreatePlaylistModalOpen && message.message;
 
     return (
         <PageContainer>

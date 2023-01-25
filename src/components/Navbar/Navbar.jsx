@@ -17,9 +17,9 @@ const Navbar = ({currentItemType, setCurrentItemType, currentTimeRange, setCurre
     }
 
     return (
-        <aside class="menu sidebar">
-            <p class="menu-label has-text-centered is-size-6 mb-0">Label here</p>
-            <ul class="menu-list">
+        <aside className="menu sidebar">
+            <p className="menu-label has-text-centered is-size-6 mb-0">Label here</p>
+            <ul className="menu-list">
                 {Object.values(SpotifyItemTypes).map(itemType => (
                     <li>
                         <button 
@@ -32,8 +32,8 @@ const Navbar = ({currentItemType, setCurrentItemType, currentTimeRange, setCurre
                 ))}
             </ul>
 
-            <p class="menu-label has-text-centered is-size-6 mb-0">Time range</p>
-            <ul class="menu-list">
+            <p className="menu-label has-text-centered is-size-6 mb-0">Time range</p>
+            <ul className="menu-list">
                 {Object.values(TimeRanges).map(timeRange => (
                     <li>
                         <button 

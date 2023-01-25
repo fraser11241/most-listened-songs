@@ -4,16 +4,16 @@ import { MessageState } from "../../enums/enums";
 import "./MessageModal.scss";
 
 const SuccessIcon = () => (
-    <div class="success-icon-container">
-        <div class="success-icon">
-            <div class="success-icon__tip" />
-            <div class="success-icon__long" />
+    <div className="success-icon-container">
+        <div className="success-icon">
+            <div className="success-icon__tip" />
+            <div className="success-icon__long" />
         </div>
     </div>
 );
 
 const MessageModal = ({ handleCloseModal, message }) => {
-    const { message: messageText, state } = message;
+    const { message: messageText, state, playlistLink } = message;
     return (
         <div
             className={`modal message-modal is-active ${
@@ -23,7 +23,9 @@ const MessageModal = ({ handleCloseModal, message }) => {
             <div className="modal-background" />
             <div className="modal-card">
                 <header className="modal-card-head">
-                    <p className="modal-card-title">{state !== MessageState.ERROR ? messageText : "Error"}</p>
+                    <p className="modal-card-title">
+                        {state !== MessageState.ERROR ? messageText : "Error"}
+                    </p>
                     <button
                         className="delete"
                         aria-label="close"
@@ -32,19 +34,29 @@ const MessageModal = ({ handleCloseModal, message }) => {
                     />
                 </header>
 
-                <section class="modal-card-body">
+                <section className="modal-card-body has-text-centered">
                     {state === MessageState.SUCCESS && <SuccessIcon />}
-                    {state === MessageState.ERROR && <div className="title is-5 has-text-danger has-text-centered">{messageText}</div>}
+                    {state === MessageState.ERROR && (
+                        <div className="title is-5 has-text-danger has-text-centered">
+                            {messageText}
+                        </div>
+                    )}
                 </section>
 
-                <footer class="modal-card-foot is-inline has-text-centered">
+                <footer className="modal-card-foot is-inline has-text-centered">
                     <button
-                        class="button is-success"
+                        className="button is-success"
                         onClick={handleCloseModal}
                         type="button"
                     >
                         Close
                     </button>
+
+                    {playlistLink && (
+                        <a className="button is-link" href={playlistLink}>
+                            Go to created playlist
+                        </a>
+                    )}
                 </footer>
             </div>
         </div>

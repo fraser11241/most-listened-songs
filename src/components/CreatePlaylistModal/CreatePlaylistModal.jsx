@@ -22,7 +22,7 @@ const CreatePlaylistModal = ({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const spotifyItemsToIncludeInPlaylist = itemsInPlaylist.reduce(
                 (arr, { item, isIncludedInPlaylist }) => {
@@ -35,7 +35,7 @@ const CreatePlaylistModal = ({
                 []
             );
     
-            const playlistCreated = await createPlaylistFromSpotifyItems(
+            const playlistId = await createPlaylistFromSpotifyItems(
                 token,
                 userId,
                 playlistName || "Playlist Name",
@@ -43,8 +43,9 @@ const CreatePlaylistModal = ({
                 spotifyItemsToIncludeInPlaylist
             );
     
-            if (playlistCreated) {
-                showMessage("Playlist created sucessfully");
+            if (playlistId) {
+                const createdPlaylistUri = `spotify:playlist:${playlistId}`;
+                showMessage("Playlist created sucessfully", MessageState.SUCCESS, {playlistLink: createdPlaylistUri});
             } else {
                 throw new Error("No playlist created")
             }
@@ -125,7 +126,7 @@ const CreatePlaylistModal = ({
                     />
                 </header>
 
-                <section class="modal-card-body">
+                <section className="modal-card-body">
                     <TextField
                         label="Playlist Name"
                         placeholder={"Playlist Name"}
@@ -153,15 +154,15 @@ const CreatePlaylistModal = ({
                     </Accordion>
                 </section>
 
-                <footer class="modal-card-foot">
+                <footer className="modal-card-foot">
                     <button
-                        class="button"
+                        className="button"
                         onClick={handleCloseModal}
                         type="button"
                     >
                         Cancel
                     </button>
-                    <button class="button is-success" type="submit">
+                    <button className="button is-success" type="submit">
                         Create Playlist
                     </button>
                 </footer>

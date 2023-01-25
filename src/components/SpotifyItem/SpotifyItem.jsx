@@ -26,9 +26,9 @@ const SpotifyItem = ({ item, children }) => {
             />
 
             <div className='text-container px-2'>
-                <h3 class={`title is-6 ${subtitle ? 'mb-1' : ''}`}>{title}</h3>
+                <h3 className={`title is-6 ${subtitle ? 'mb-1' : ''}`}>{title}</h3>
                 {subtitle && (
-                    <p class="subtitle is-6">{subtitle}</p>
+                    <p className="subtitle is-6">{subtitle}</p>
                 )}
             </div>
 

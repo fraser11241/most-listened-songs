@@ -96,6 +96,6 @@ export const createPlaylistFromSpotifyItems = async (
         const uris = spotifyItems.map(({uri}) => uri);
         const {snapshot_id} = await addSongsToPlaylist(token, playlistId, uris);
     
-        return !!snapshot_id;
+        return snapshot_id ? playlistId : false
 
 };

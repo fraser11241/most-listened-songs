@@ -20,7 +20,7 @@ const Accordion = ({ children, isOpenByDefault }) => {
             </button>
 
             {isOpen && (
-                <div class="message-body accordion-content">{children}</div>
+                <div className="message-body accordion-content">{children}</div>
             )}
         </article>
     );
