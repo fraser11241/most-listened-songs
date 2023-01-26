@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const LoadingIndicator = () => {
-    return 'Loading';
-}
+  return "Loading";
+};
 
 export default LoadingIndicator;

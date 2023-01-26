@@ -22,7 +22,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
   },
   "eslintConfig": {
     "extends": [
@@ -65,6 +66,7 @@
     "@storybook/testing-library": "^0.0.13",
     "babel-plugin-named-exports-order": "^0.0.2",
     "gh-pages": "^4.0.0",
+    "prettier": "^2.8.3",
     "prop-types": "^15.8.1",
     "webpack": "^5.74.0"
   }
