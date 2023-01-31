@@ -1,0 +1,44 @@
+.skeleton {
+	background-color: rgb(255, 255, 255);
+
+	.spotify-item-container {
+	}
+
+	.spotify-item-image,
+	.title,
+	.subtitle {
+		padding: 0;
+		animation: skeleton-loading 1s linear infinite alternate;
+	}
+
+	.text-container {
+		// height: 100%;
+		width: 90%;
+
+		.title,
+		.subtitle {
+			height: 20px;
+			display: block;
+		}
+
+		.title {
+			width: 40%;
+			max-width: 150px;
+			margin: 0;
+			margin-bottom: 0.25em;
+		}
+		.subtitle {
+			width: 60%;
+			max-width: 225px;
+		}
+	}
+}
+
+@keyframes skeleton-loading {
+	0% {
+		background-color: hsl(200, 20%, 80%);
+	}
+	100% {
+		background-color: hsl(200, 20%, 95%);
+	}
+}

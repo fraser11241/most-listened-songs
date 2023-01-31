@@ -1,30 +1,33 @@
-import React from "react";
-import EmptyIndicator from "../EmptyIndicator/EmptyIndicator";
+import React, { useState, useEffect } from "react";
 
+import EmptyIndicator from "../EmptyIndicator/EmptyIndicator";
 import SpotifyItemList from "../SpotifyItemList/SpotifyItemList";
 
 import "./SpotifyItemListPanel.scss";
 
 const SpotifyItemListPanel = ({
-  items,
-  title,
-  createPlaylist,
-  currentTimeRange,
-  setCurrentTimeRange,
+	items,
+	title,
+	createPlaylist,
+	isError,
+	isLoading,
 }) => {
-  return (
-    <div>
-      <ol className="spotify-item-list">
-        {title && <h2 className="title is-2 is-inline">{title}</h2>}
+	const isEmpty = !isError && !items.length && !isLoading;
 
-        {items ? (
-          <SpotifyItemList items={items} createPlaylist={createPlaylist} />
-        ) : (
-          <EmptyIndicator />
-        )}
-      </ol>
-    </div>
-  );
+	return (
+		<div className="spotify-item-list-panel">
+			<div class="header-wrapper">{title && <h2>{title}</h2>}</div>
+			{isEmpty ? (
+				<EmptyIndicator />
+			) : (
+				<SpotifyItemList
+					items={items}
+					createPlaylist={createPlaylist}
+					isLoading={isLoading}
+				/>
+			)}
+		</div>
+	);
 };
 
 export default SpotifyItemListPanel;
