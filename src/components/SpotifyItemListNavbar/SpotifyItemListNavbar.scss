@@ -1,41 +1,12 @@
 .navbar-wrapper {
-	margin-top: 5px;
 	position: sticky;
 	top: 0;
 	z-index: 10;
 	background: transparent;
 }
 
-.navbar-item-list {
+.navbar-button-container {
 	display: flex;
 	justify-content: center;
-
-	.navbar-item {
-		border: 0;
-
-		border-top: 1px solid gray;
-		border-bottom: 1px solid gray;
-		background: white;
-
-		&:active,
-		&:focus-visible {
-			background: lightblue;
-		}
-	}
-
-	.navbar-item:first-child {
-		border-radius: 4px 0 0 4px;
-		border-left: 1px solid gray;
-	}
-
-	.navbar-item:last-child {
-		border-right: 1px solid gray;
-		border-radius: 0 4px 4px 0;
-	}
-}
-
-.navbar-item {
-	line-height: 1.5;
-	padding: 0.5rem 0.75rem;
-	background: none;
+	background: white;
 }

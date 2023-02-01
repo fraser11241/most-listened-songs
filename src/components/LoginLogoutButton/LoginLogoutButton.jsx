@@ -8,6 +8,7 @@ const LoginLogoutButton = ({ isLoggedIn, loginUrl, handleLogout }) => {
         position: "absolute",
         top: "10px",
         right: "10px",
+        zIndex: 100
       }}
       onClick={handleLogout}
     >

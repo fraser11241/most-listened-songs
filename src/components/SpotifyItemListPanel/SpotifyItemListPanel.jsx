@@ -1,3 +1,4 @@
+import { Container, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 
 import EmptyIndicator from "../EmptyIndicator/EmptyIndicator";
@@ -15,8 +16,8 @@ const SpotifyItemListPanel = ({
 	const isEmpty = !isError && !items.length && !isLoading;
 
 	return (
-		<div className="spotify-item-list-panel">
-			<div class="header-wrapper">{title && <h2>{title}</h2>}</div>
+		<Container maxWidth="md">
+			{title && <Typography component="h2" variant="h5">{title}</Typography>}
 			{isEmpty ? (
 				<EmptyIndicator />
 			) : (
@@ -26,7 +27,7 @@ const SpotifyItemListPanel = ({
 					isLoading={isLoading}
 				/>
 			)}
-		</div>
+		</Container>
 	);
 };
 

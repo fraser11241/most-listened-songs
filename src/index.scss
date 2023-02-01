@@ -39,23 +39,3 @@ code {
 	margin: 0;
 	padding: 0;
 }
-
-// html,
-// body,
-// #root {
-// 	background-color: var(--app-background-color);
-// }
-
-button:focus-visible {
-	outline: 3px solid black;
-	outline-offset: 2px;
-	opacity: 0.95;
-}
-
-button:hover {
-	opacity: 0.95;
-}
-
-button:active {
-	background-color: #5150e3;
-}

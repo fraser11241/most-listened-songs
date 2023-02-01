@@ -1,31 +1,36 @@
+import { Tab, Tabs } from "@mui/material";
 import React from "react";
 import { SpotifyItemTypes } from "../../enums/enums";
 
 import "./SpotifyItemListNavbar.scss";
 
 const SpotifyItemListNavbar = ({ currentItemType, setCurrentItemType }) => {
-	const navbarContent = {
-		[SpotifyItemTypes.ARTIST]: "Top Artists",
-		[SpotifyItemTypes.TOP_TRACK]: "Top Tracks",
-		[SpotifyItemTypes.RECENT_TRACK]: "Recent Tracks",
-	};
+    const navbarContent = {
+        [SpotifyItemTypes.ARTIST]: "Artists",
+        [SpotifyItemTypes.TOP_TRACK]: "Tracks",
+        [SpotifyItemTypes.RECENT_TRACK]: "Recent",
+    };
 
-	return (
-		<div className="navbar-wrapper">
-			<div className="navbar-item-list">
-				{Object.entries(navbarContent).map(([value, text]) => (
-					<button
-						className={`navbar-item ${
-							value === currentItemType ? "current" : ""
-						}`}
-						onClick={() => setCurrentItemType(+value)}
-					>
-						{text}
-					</button>
-				))}
-			</div>
-		</div>
-	);
+    return (
+        <div className="navbar-wrapper">
+            <div className="navbar-button-container">
+                <Tabs
+					value={currentItemType}
+					variant="scrollable"
+					allowScrollButtonsMobile={true}
+>
+                    {Object.entries(navbarContent).map(([value, text]) => (
+                        <Tab
+						tabIndex={0}
+                            onClick={() => setCurrentItemType(+value)}
+							value={+value}
+                            label={text}
+                        />
+                    ))}
+                </Tabs>
+            </div>
+        </div>
+    );
 };
 
 export default SpotifyItemListNavbar;
