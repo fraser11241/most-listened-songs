@@ -4,45 +4,52 @@ $md: 1200px;
 $lg: 1536px;
 
 .spotify-item-list {
-    list-style-type: none !important;
+	list-style-type: none !important;
 }
 
 .create-playlist-button-container {
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
+}
+
+// Hide caption by default, use slide in animation to show on hover
+.hide-image-caption {
+	.MuiImageListItemBar-root {
+		display: none;
+	}
 }
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 300px) {
-    .image-grid {
-        grid-template-columns: repeat(1, 1fr) !important;
-    }
+	.image-grid {
+		grid-template-columns: repeat(1, 1fr) !important;
+	}
 }
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (min-width: 300px) {
-    .image-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
+	.image-grid {
+		grid-template-columns: repeat(2, 1fr) !important;
+	}
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-    .image-grid {
-        grid-template-columns: repeat(3, 1fr) !important;
-    }
+	.image-grid {
+		grid-template-columns: repeat(3, 1fr) !important;
+	}
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-    .image-grid {
-        grid-template-columns: repeat(4, 1fr) !important;
-    }
+	.image-grid {
+		grid-template-columns: repeat(4, 1fr) !important;
+	}
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .image-grid {
-        grid-template-columns: repeat(5, 1fr) !important;
-    }
+	.image-grid {
+		grid-template-columns: repeat(5, 1fr) !important;
+	}
 }

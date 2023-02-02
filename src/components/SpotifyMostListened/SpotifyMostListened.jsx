@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 
 import { SpotifyItemTypes, TimeRanges, MessageState } from "../../enums/enums";
 import {
@@ -19,6 +20,7 @@ import PageContainer from "../PageContainer/PageContainer";
 import CreatePlaylistModal from "../CreatePlaylistModal/CreatePlaylistModal";
 import MessageModal from "../MessageModal/MessageModal";
 import SpotifyItemListNavbar from "../SpotifyItemListNavbar/SpotifyItemListNavbar";
+import BottomNav from "../BottomNav/BottomNav";
 
 const SpotifyMostListened = () => {
 	const [recentTracks, setRecentTracks] = useState([]);
@@ -35,6 +37,7 @@ const SpotifyMostListened = () => {
 	const [isCreatePlaylistModalOpen, setIsCreatePlaylistModalOpen] =
 		useState(false);
 	const [message, setMessage] = useState({});
+	const [showItemListAsGrid, setShowItemListAsGrid] = useState(false);
 
 	const { token } = useContext(loginContext);
 
@@ -144,12 +147,9 @@ const SpotifyMostListened = () => {
 	const showItemList =
 		!isErrorFetching && recentTracks && recentTracks.length;
 	const showMessage = !isCreatePlaylistModalOpen && message.message;
-
-	console.log("CURRENT ITEM TYPE", currentItemType);
+	console.log(showItemListAsGrid);
 	return (
 		<PageContainer>
-			{/* <h1 className="title is-2">Spotify Most Listened</h1> */}
-
 			<SpotifyItemListNavbar
 				currentItemType={currentItemType}
 				setCurrentItemType={setCurrentItemType}
@@ -162,8 +162,13 @@ const SpotifyMostListened = () => {
 				currentTimeRange={currentTimeRange}
 				isLoading={isLoading}
 				isError={isErrorFetching}
+				showAsGrid={showItemListAsGrid}
 			/>
 
+			<BottomNav
+				showGridView={showItemListAsGrid}
+				setShowGridView={setShowItemListAsGrid}
+			/>
 			{/* {showError && (
 				<div className="column is-10 has-background">
 					{errorMessage || "Error fetching content"}
