@@ -13,21 +13,23 @@ import TableRowsIcon from "@mui/icons-material/TableRows";
 import AppsIcon from "@mui/icons-material/Apps";
 import AddIcon from "@mui/icons-material/Add";
 
-const BottomNav = ({ showGridView, setShowGridView }) => {
+const BottomNav = ({
+	showGridView,
+	setShowGridView,
+	showCreatePlaylistModal,
+}) => {
 	const hideNavbar = useScrollTrigger({
 		// threshold: 200,
 		disableHysteresis: true,
 	});
 	const navbarRef = useRef();
 
-	const navbarHeight = navbarRef?.current?.clientHeight;
-
 	return (
 		<div
 			style={{
 				display: "flex",
 				flexDirection: "column",
-				position: "fixed",
+				position: "sticky",
 				bottom: 0,
 				left: 0,
 				right: 0,
@@ -37,16 +39,16 @@ const BottomNav = ({ showGridView, setShowGridView }) => {
 				color="primary"
 				size="medium"
 				sx={{
-					position: "relative",
-					bottom: hideNavbar ? `-${navbarHeight}px` : 0,
-					margin: "0 auto 24px auto",
+					margin: "auto",
+					marginBottom: "10px",
 				}}
 				variant="extended"
+				onClick={showCreatePlaylistModal}
 			>
 				Create Playlist
 				<AddIcon />
 			</Fab>
-			<Slide in={!hideNavbar} direction="up">
+			<Slide in={!hideNavbar} direction="up" unmountOnExit>
 				<Paper elevation={3} ref={navbarRef}>
 					<BottomNavigation
 						showLabels
@@ -65,8 +67,6 @@ const BottomNav = ({ showGridView, setShowGridView }) => {
 							label="Grid View"
 							icon={<AppsIcon />}
 						/>
-						{/* <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-			<BottomNavigationAction label="Archive" icon={<ArchiveIcon />} /> */}
 					</BottomNavigation>
 				</Paper>
 			</Slide>

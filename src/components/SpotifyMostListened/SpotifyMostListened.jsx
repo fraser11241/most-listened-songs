@@ -147,7 +147,7 @@ const SpotifyMostListened = () => {
 	const showItemList =
 		!isErrorFetching && recentTracks && recentTracks.length;
 	const showMessage = !isCreatePlaylistModalOpen && message.message;
-	console.log(showItemListAsGrid);
+
 	return (
 		<PageContainer>
 			<SpotifyItemListNavbar
@@ -158,17 +158,14 @@ const SpotifyMostListened = () => {
 			<SpotifyItemListPanel
 				items={getCurrentSpotifyItemsWithoutDuplicates()}
 				title={getCurrentSpotifyItemsCategoryText()}
-				createPlaylist={createPlaylistFromSpotifyItems}
 				currentTimeRange={currentTimeRange}
 				isLoading={isLoading}
 				isError={isErrorFetching}
-				showAsGrid={showItemListAsGrid}
+				showCreatePlaylistModal={() =>
+					setIsCreatePlaylistModalOpen(true)
+				}
 			/>
 
-			<BottomNav
-				showGridView={showItemListAsGrid}
-				setShowGridView={setShowItemListAsGrid}
-			/>
 			{/* {showError && (
 				<div className="column is-10 has-background">
 					{errorMessage || "Error fetching content"}
@@ -183,15 +180,14 @@ const SpotifyMostListened = () => {
 				/>
 			)}
 
-			{isCreatePlaylistModalOpen && (
-				<CreatePlaylistModal
-					token={token}
-					userId={userInfo.id}
-					handleCloseModal={() => setIsCreatePlaylistModalOpen(false)}
-					getCurrentItemsForPlaylist={getCurrentItemsForPlaylist}
-					showMessage={displayMessage}
-				/>
-			)}
+			<CreatePlaylistModal
+				token={token}
+				userId={userInfo.id}
+				handleCloseModal={() => setIsCreatePlaylistModalOpen(false)}
+				getCurrentItemsForPlaylist={getCurrentItemsForPlaylist}
+				showMessage={displayMessage}
+				isOpen={isCreatePlaylistModalOpen}
+			/>
 		</PageContainer>
 	);
 };

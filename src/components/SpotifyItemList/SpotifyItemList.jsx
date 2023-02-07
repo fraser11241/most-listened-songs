@@ -5,10 +5,10 @@ import {
 	ImageListItemBar,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import React from "react";
+import React, { useState } from "react";
 import SpotifyItem from "../SpotifyItem/SpotifyItem";
 import SpotifyItemSkeletonLoading from "../SpotifyItemSkeletonLoading/SpotifyItemSkeletonLoading";
-
+import BottomNav from "../BottomNav/BottomNav";
 import "./SpotifyItemList.scss";
 
 const SkeletonLoadingItems = () =>
@@ -20,6 +20,7 @@ const SkeletonLoadingItems = () =>
 
 // TODO remove as duplicate in SpotifyItem
 const getContentForItem = (item) => {
+	console.log("ITEM", item);
 	const showSubtitle = !!item.artists;
 
 	return {
@@ -68,35 +69,46 @@ const SpotifyItemList = ({
 	isLoading,
 	showImageCaption,
 	showAsGrid,
+	setShowAsGrid,
+	showCreatePlaylistModal,
 }) => {
-	return showAsGrid ? (
-		<ImageGrid items={items} showImageCaption={showImageCaption} />
-	) : (
+	console.log("ITEMS", items);
+	return (
 		<div>
-			<ol className="spotify-item-list">
-				{isLoading && <SkeletonLoadingItems />}
+			{showAsGrid ? (
+				<ImageGrid items={items} showImageCaption={showImageCaption} />
+			) : (
+				<ol className="spotify-item-list">
+					{isLoading && <SkeletonLoadingItems />}
 
-				{!isLoading &&
-					items.map((item) => {
-						return (
-							<li>
-								<SpotifyItem item={item} />
-							</li>
-						);
-					})}
-			</ol>
+					{!isLoading &&
+						items.map((item) => {
+							console.log("ITEM", item);
+							return (
+								<li>
+									<SpotifyItem item={item} />
+								</li>
+							);
+						})}
+				</ol>
+			)}
 
 			{!isLoading && (
-				<div className="create-playlist-button-container">
-					<Button
-						variant="contained"
-						startIcon={<AddIcon />}
-						sx={{ marginBottom: (theme) => theme.spacing(1) }}
-						onClick={createPlaylist}
-					>
-						Create Playlist
-					</Button>
-				</div>
+				<BottomNav
+					showGridView={showAsGrid}
+					setShowGridView={setShowAsGrid}
+					showCreatePlaylistModal={showCreatePlaylistModal}
+				/>
+				// <div className="create-playlist-button-container">
+				// 	<Button
+				// 		variant="contained"
+				// 		startIcon={<AddIcon />}
+				// 		sx={{ marginBottom: (theme) => theme.spacing(1) }}
+				// 		onClick={createPlaylist}
+				// 	>
+				// 		Create Playlist
+				// 	</Button>
+				// </div>
 			)}
 		</div>
 	);

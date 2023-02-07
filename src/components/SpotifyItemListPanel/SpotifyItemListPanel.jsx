@@ -14,12 +14,12 @@ import "./SpotifyItemListPanel.scss";
 const SpotifyItemListPanel = ({
 	items,
 	title,
-	createPlaylist,
+	showCreatePlaylistModal,
 	isError,
 	isLoading,
-	showAsGrid,
 }) => {
-	const [showImageCaption, setShowImageCaption] = useState(false);
+	const [showAsGrid, setShowAsGrid] = useState(false);
+	const [showImageCaption, setShowImageCaption] = useState(true);
 	const isEmpty = !isError && !items.length && !isLoading;
 
 	return (
@@ -37,17 +37,19 @@ const SpotifyItemListPanel = ({
 						{title}
 					</Typography>
 				)}
-				<FormControlLabel
-					control={
-						<Checkbox
-							value={showImageCaption}
-							onChange={() =>
-								setShowImageCaption(!showImageCaption)
-							}
-						/>
-					}
-					label="Show Titles"
-				/>
+				{showAsGrid && (
+					<FormControlLabel
+						control={
+							<Checkbox
+								value={showImageCaption}
+								onChange={() =>
+									setShowImageCaption(!showImageCaption)
+								}
+							/>
+						}
+						label="Hide Titles"
+					/>
+				)}
 			</div>
 
 			{isEmpty ? (
@@ -55,10 +57,11 @@ const SpotifyItemListPanel = ({
 			) : (
 				<SpotifyItemList
 					items={items}
-					createPlaylist={createPlaylist}
 					isLoading={isLoading}
 					showImageCaption={showImageCaption}
 					showAsGrid={showAsGrid}
+					setShowAsGrid={setShowAsGrid}
+					showCreatePlaylistModal={showCreatePlaylistModal}
 				/>
 			)}
 		</Container>
