@@ -1,66 +1,61 @@
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField,
+    Typography,
+} from "@mui/material";
 import React from "react";
 import { MessageState } from "../../enums/enums";
 
 import "./MessageModal.scss";
 
-const SuccessIcon = () => (
-  <div className="success-icon-container">
-    <div className="success-icon">
-      <div className="success-icon__tip" />
-      <div className="success-icon__long" />
-    </div>
-  </div>
+const PlaylistImage = ({playlistImage, playlistLink}) => (
+    <a href={playlistLink}>
+        <img style={{width: '100%'}} src={playlistImage} />
+    </a>
 );
 
-const MessageModal = ({ handleCloseModal, message }) => {
-  const { message: messageText, state, playlistLink } = message;
-  return (
-    <div
-      className={`modal message-modal is-active ${
-        state === MessageState.ERROR ? "error" : ""
-      }`}
-    >
-      <div className="modal-background" />
-      <div className="modal-card">
-        <header className="modal-card-head">
-          <p className="modal-card-title">
-            {state !== MessageState.ERROR ? messageText : "Error"}
-          </p>
-          <button
-            className="delete"
-            aria-label="close"
-            onClick={handleCloseModal}
-            type="button"
-          />
-        </header>
+const MessageModal = ({ handleCloseModal, message, isOpen }) => {
+    const {
+        message: messageText,
+        state,
+        playlistLink,
+        playlistImage,
+    } = message;
 
-        <section className="modal-card-body has-text-centered">
-          {state === MessageState.SUCCESS && <SuccessIcon />}
-          {state === MessageState.ERROR && (
-            <div className="title is-5 has-text-danger has-text-centered">
-              {messageText}
-            </div>
-          )}
-        </section>
-
-        <footer className="modal-card-foot is-inline has-text-centered">
-          <button
-            className="button is-success"
-            onClick={handleCloseModal}
-            type="button"
-          >
-            Close
-          </button>
-
-          {playlistLink && (
-            <a className="button is-link" href={playlistLink}>
-              Go to created playlist
-            </a>
-          )}
-        </footer>
-      </div>
-    </div>
-  );
+    return (
+        <Dialog
+            open={isOpen}
+            onClose={handleCloseModal}
+            aria-labelledby="dialog-title"
+        >
+            <DialogTitle id="dialog-title">
+                <p className="modal-card-title">
+                    {state !== MessageState.ERROR ? messageText : "Error"}
+                </p>
+            </DialogTitle>
+            <DialogContent>
+                <section>
+                    <Typography>
+                        {state === MessageState.SUCCESS && (
+                            <PlaylistImage
+                                playlistImage={playlistImage}
+                                playlistLink={playlistLink}
+                            />
+                        )}
+                    </Typography>
+                </section>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleCloseModal}>Close</Button>
+                <Button href={playlistLink}>View Playlist</Button>
+            </DialogActions>
+        </Dialog>
+    );
 };
 
 export default MessageModal;

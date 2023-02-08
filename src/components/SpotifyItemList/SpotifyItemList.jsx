@@ -20,7 +20,6 @@ const SkeletonLoadingItems = () =>
 
 // TODO remove as duplicate in SpotifyItem
 const getContentForItem = (item) => {
-	console.log("ITEM", item);
 	const showSubtitle = !!item.artists;
 
 	return {
@@ -72,7 +71,6 @@ const SpotifyItemList = ({
 	setShowAsGrid,
 	showCreatePlaylistModal,
 }) => {
-	console.log("ITEMS", items);
 	return (
 		<div>
 			{showAsGrid ? (
@@ -83,7 +81,6 @@ const SpotifyItemList = ({
 
 					{!isLoading &&
 						items.map((item) => {
-							console.log("ITEM", item);
 							return (
 								<li>
 									<SpotifyItem item={item} />

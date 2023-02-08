@@ -155,7 +155,7 @@ const SpotifyMostListened = () => {
 				setCurrentItemType={setCurrentItemType}
 			/>
 
-			<SpotifyItemListPanel
+			{showItemList && <SpotifyItemListPanel
 				items={getCurrentSpotifyItemsWithoutDuplicates()}
 				title={getCurrentSpotifyItemsCategoryText()}
 				currentTimeRange={currentTimeRange}
@@ -164,7 +164,7 @@ const SpotifyMostListened = () => {
 				showCreatePlaylistModal={() =>
 					setIsCreatePlaylistModalOpen(true)
 				}
-			/>
+			/>}
 
 			{/* {showError && (
 				<div className="column is-10 has-background">
@@ -173,12 +173,11 @@ const SpotifyMostListened = () => {
 			)}
 			*/}
 
-			{showMessage && (
 				<MessageModal
 					handleCloseModal={hideMessage}
 					message={message}
+					isOpen={showMessage}
 				/>
-			)}
 
 			<CreatePlaylistModal
 				token={token}

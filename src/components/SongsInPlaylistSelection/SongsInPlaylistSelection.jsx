@@ -13,20 +13,23 @@ const SongsInPlaylistSelection = ({
 	return (
 		itemsInPlaylist && (
 			<>
+			<div style={{display: 'flex', justifyContent: 'end'}}> 
 				<Button
-					className="button is-small mb-1 deselect-all-button"
 					onClick={selectAll}
 					type="button"
+					variant="text"
 				>
 					Select all
 				</Button>
 				<Button
-					className="button is-small mb-1 deselect-all-button"
 					onClick={deselectAll}
 					type="button"
+					variant="text"
+
 				>
 					Deselect all
 				</Button>
+			</div>
 
 				<ol className="songs-in-playlist-selection">
 					{itemsInPlaylist.map(
@@ -41,9 +44,10 @@ const SongsInPlaylistSelection = ({
 								>
 									<SpotifyItem item={item}>
 										<Switch
+											sx={{marginLeft: 'auto'}}
 											checked={isIncludedInPlaylist}
 											onChange={
-												toggleIsIncludedInPlaylist
+												() => toggleIsIncludedInPlaylist(index)
 											}
 										/>
 									</SpotifyItem>
