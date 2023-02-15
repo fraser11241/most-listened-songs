@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 
 import EmptyIndicator from "../EmptyIndicator/EmptyIndicator";
 import SpotifyItemList from "../SpotifyItemList/SpotifyItemList";
+import TimeRangeSelector from "../TimeRangeSelector/TimeRangeSelector";
 
 import "./SpotifyItemListPanel.scss";
 
@@ -17,6 +18,8 @@ const SpotifyItemListPanel = ({
 	showCreatePlaylistModal,
 	isError,
 	isLoading,
+	timeRange,
+	setTimeRange,
 }) => {
 	const [showAsGrid, setShowAsGrid] = useState(false);
 	const [showImageCaption, setShowImageCaption] = useState(true);
@@ -32,11 +35,33 @@ const SpotifyItemListPanel = ({
 					flexWrap: "wrap",
 				}}
 			>
-				{title && (
-					<Typography component="h2" variant="h5">
-						{title}
-					</Typography>
-				)}
+				<div
+					style={{
+						display: "flex",
+						flexWrap: "wrap",
+						flexDirection: "column",
+					}}
+				>
+					{title && (
+						<Typography
+							sx={{
+								display: "inline",
+								marginRight: showAsGrid
+									? (theme) => theme.spacing(1)
+									: 0,
+							}}
+							component="h2"
+							variant="h5"
+						>
+							{title}
+						</Typography>
+					)}
+
+					<TimeRangeSelector
+						timeRange={timeRange}
+						setTimeRange={setTimeRange}
+					/>
+				</div>
 				{showAsGrid && (
 					<FormControlLabel
 						control={

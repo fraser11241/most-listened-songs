@@ -1,13 +1,10 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import {
 	BottomNavigation,
 	BottomNavigationAction,
 	Fab,
-	Icon,
 	Paper,
 	Slide,
-	Typography,
-	useScrollTrigger,
 } from "@mui/material";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import AppsIcon from "@mui/icons-material/Apps";
@@ -18,12 +15,6 @@ const BottomNav = ({
 	setShowGridView,
 	showCreatePlaylistModal,
 }) => {
-	const hideNavbar = useScrollTrigger({
-		// threshold: 200,
-		disableHysteresis: true,
-	});
-	const navbarRef = useRef();
-
 	return (
 		<div
 			style={{
@@ -49,7 +40,7 @@ const BottomNav = ({
 				<AddIcon />
 			</Fab>
 			<Slide in="true" direction="up" unmountOnExit>
-				<Paper elevation={3} ref={navbarRef}>
+				<Paper elevation={3}>
 					<BottomNavigation
 						showLabels
 						value={showGridView}
