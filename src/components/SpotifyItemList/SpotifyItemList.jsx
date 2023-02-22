@@ -34,7 +34,7 @@ const getContentForItem = (item) => {
 
 const ImageGrid = ({ items, showImageCaption }) => {
 	return (
-		<div>
+		<div className="image-grid">
 			<ImageList className="image-grid" gap={8}>
 				{items.map((item) => {
 					const { title, subtitle, imageUrl, previewUrl } =
@@ -46,7 +46,7 @@ const ImageGrid = ({ items, showImageCaption }) => {
 							}
 						>
 							<img
-								sx={{ aspectRatio: 1 }}
+								className="grid-image"
 								src={imageUrl}
 								alt={title}
 							/>
@@ -72,7 +72,7 @@ const SpotifyItemList = ({
 	showCreatePlaylistModal,
 }) => {
 	return (
-		<div>
+		<div className="item-list-wrapper">
 			{showAsGrid ? (
 				<ImageGrid items={items} showImageCaption={showImageCaption} />
 			) : (

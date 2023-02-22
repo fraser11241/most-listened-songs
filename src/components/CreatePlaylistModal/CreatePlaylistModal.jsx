@@ -29,6 +29,8 @@ const CreatePlaylistModal = ({
 	handleCloseModal,
 	getCurrentItemsForPlaylist,
 	showMessage,
+	numSongsFromArtist,
+	setNumSongsFromArtist,
 }) => {
 	const [itemsInPlaylist, setItemsInPlaylist] = useState();
 	const [playlistName, setPlaylistName] = useState("Playlist Name");
@@ -63,7 +65,6 @@ const CreatePlaylistModal = ({
 					token,
 					playlistId
 				);
-				console.log(createdPlaylistImage);
 				showMessage(
 					"Playlist created sucessfully",
 					MessageState.SUCCESS,
@@ -122,7 +123,7 @@ const CreatePlaylistModal = ({
 		);
 	};
 
-	useEffect(() => {
+	const getItemsForSelection = async () => {
 		Promise.resolve(getCurrentItemsForPlaylist()).then((items) => {
 			setItemsInPlaylist(
 				items.map((item) => {
@@ -133,16 +134,19 @@ const CreatePlaylistModal = ({
 				})
 			);
 		});
+	}
+	useEffect(() => {
+		getItemsForSelection();
 	}, [getCurrentItemsForPlaylist]);
 
 	return (
-		<form>
 			<Dialog
 				open={isOpen}
 				onClose={handleCloseModal}
 				aria-labelledby="dialog-title"
 				aria-describedby="dialog-description"
 			>
+
 				<DialogTitle id="dialog-title">Create Playlist</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="dialog-description"></DialogContentText>
@@ -175,14 +179,17 @@ const CreatePlaylistModal = ({
 						deselectAll={deselectAll}
 						selectAll={selectAll}
 						toggleIsIncludedInPlaylist={toggleIsIncludedInPlaylist}
+						updateItemSelection={getItemsForSelection}
+						numSongsFromArtist={numSongsFromArtist}
+						setNumSongsFromArtist={setNumSongsFromArtist}
 					/>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCloseModal}>Cancel</Button>
 					<Button onClick={handleSubmit}>Create Playlist</Button>
 				</DialogActions>
+
 			</Dialog>
-		</form>
 	);
 };
 

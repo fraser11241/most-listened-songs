@@ -1,7 +1,6 @@
 import { buttonUnstyledClasses } from "@mui/base";
 import { Button } from "@mui/material";
 import React from "react";
-import { ButtonGroup } from "react-bootstrap";
 import { TimeRanges } from "../../enums/enums";
 
 const TimeRangeSelector = ({ timeRange, setTimeRange }) => {
@@ -11,8 +10,6 @@ const TimeRangeSelector = ({ timeRange, setTimeRange }) => {
 		[TimeRanges.SHORT_TERM]: "Recent",
 	};
 
-	console.log("TIME RANGE", timeRange);
-	console.log(timeRangeText);
 	return (
 		<div
 			style={{

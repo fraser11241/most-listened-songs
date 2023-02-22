@@ -12,7 +12,7 @@ const SpotifyItemListNavbar = ({ currentItemType, setCurrentItemType }) => {
     };
 
     return (
-        <div className="navbar-wrapper">
+        <header className="navbar-wrapper">
             <div className="navbar-button-container">
                 <Tabs
 					value={currentItemType}
@@ -29,7 +29,7 @@ const SpotifyItemListNavbar = ({ currentItemType, setCurrentItemType }) => {
                     ))}
                 </Tabs>
             </div>
-        </div>
+        </header>
     );
 };
 

@@ -17,6 +17,7 @@ const BottomNav = ({
 }) => {
 	return (
 		<div
+			className="bottom-nav"
 			style={{
 				display: "flex",
 				flexDirection: "column",

@@ -3,6 +3,14 @@ $sm: 900;
 $md: 1200px;
 $lg: 1536px;
 
+.item-list-wrapper {
+	height: 100%;
+	flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+	flex-grow: 1;
+}
+
 .spotify-item-list {
 	list-style-type: none !important;
 }
@@ -19,10 +27,13 @@ $lg: 1536px;
 	}
 }
 
-/* Extra small devices (phones, 600px and down) */
+.grid-image {
+	aspect-ratio: 1;
+}
+
 @media only screen and (max-width: 300px) {
 	.image-grid {
-		grid-template-columns: repeat(1, 1fr) !important;
+		grid-template-columns: repeat(2, 1fr) !important;
 	}
 }
 
