@@ -31,6 +31,7 @@ const CreatePlaylistModal = ({
 	showMessage,
 	numSongsFromArtist,
 	setNumSongsFromArtist,
+	itemType
 }) => {
 	const [itemsInPlaylist, setItemsInPlaylist] = useState();
 	const [playlistName, setPlaylistName] = useState("Playlist Name");
@@ -124,7 +125,7 @@ const CreatePlaylistModal = ({
 	};
 
 	const getItemsForSelection = async () => {
-		Promise.resolve(getCurrentItemsForPlaylist()).then((items) => {
+		getCurrentItemsForPlaylist().then((items) => {
 			setItemsInPlaylist(
 				items.map((item) => {
 					return {
@@ -135,9 +136,10 @@ const CreatePlaylistModal = ({
 			);
 		});
 	}
+
 	useEffect(() => {
 		getItemsForSelection();
-	}, [getCurrentItemsForPlaylist]);
+	}, [getCurrentItemsForPlaylist, numSongsFromArtist]);
 
 	return (
 			<Dialog
@@ -179,9 +181,9 @@ const CreatePlaylistModal = ({
 						deselectAll={deselectAll}
 						selectAll={selectAll}
 						toggleIsIncludedInPlaylist={toggleIsIncludedInPlaylist}
-						updateItemSelection={getItemsForSelection}
 						numSongsFromArtist={numSongsFromArtist}
 						setNumSongsFromArtist={setNumSongsFromArtist}
+						itemType={itemType}
 					/>
 				</DialogContent>
 				<DialogActions>

@@ -3,16 +3,19 @@ import { Button, Slider, Switch, Typography } from "@mui/material";
 import SpotifyItem from "../SpotifyItem/SpotifyItem";
 
 import "./SongsInPlaylistSelection.scss";
+import { SpotifyItemTypes } from "../../enums/enums";
 
 const SongsInPlaylistSelection = ({
     toggleIsIncludedInPlaylist,
     itemsInPlaylist,
     deselectAll,
     selectAll,
-    updateItemSelection,
 	numSongsFromArtist,
     setNumSongsFromArtist,
+    itemType
 }) => {
+	const [sliderValue, setSliderValue] = useState(numSongsFromArtist);
+
     return (
         itemsInPlaylist && (
             <div className="songs-in-playlist-selection">
@@ -20,16 +23,18 @@ const SongsInPlaylistSelection = ({
                     <Typography variant="body1" fontWeight={"bolder"}>
                         Items Per Artist
                     </Typography>
-                    <Slider
+                    {
+                        itemType === SpotifyItemTypes.ARTIST && <Slider
                         gutterbottom
                         valueLabelDisplay="auto"
                         step={1}
                         min={1}
                         max={10}
-                        value={numSongsFromArtist}
-                        onChange={(e) => setNumSongsFromArtist(e.target.value)}
-                        onChangeCommitted={updateItemSelection}
+                        value={sliderValue}
+                        onChange={(e) => {setSliderValue(e.target.value)}}
+                        onChangeCommitted={(e) => {setNumSongsFromArtist(sliderValue)}}
                     />
+}
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "end" }}>

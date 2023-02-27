@@ -7,9 +7,7 @@ import {
     fetchUserTopArtists,
     fetchUserTopTracks,
 } from "../../requests/userInfo";
-import {
-    getTopSongsFromArtists,
-} from "../../requests/playlist";
+import { getTopSongsFromArtists } from "../../requests/playlist";
 import "./SpotifyMostListened.scss";
 
 import loginContext from "../LoginHandler/LoginContext";
@@ -34,7 +32,6 @@ const SpotifyMostListened = () => {
     const [isCreatePlaylistModalOpen, setIsCreatePlaylistModalOpen] =
         useState(false);
     const [message, setMessage] = useState({});
-    const [showItemListAsGrid, setShowItemListAsGrid] = useState(false);
     const [numArtists, setNumArtists] = useState(10);
     const [numSongsFromArtist, setNumSongsFromArtist] = useState(5);
 
@@ -46,7 +43,7 @@ const SpotifyMostListened = () => {
             case SpotifyItemTypes.RECENT_TRACK:
                 return recentTracks;
             case SpotifyItemTypes.ARTIST:
-                return topArtists;
+                return topArtists.slice(0, numArtists);
             case SpotifyItemTypes.TOP_TRACK:
                 return topTracks;
             default:
@@ -79,7 +76,7 @@ const SpotifyMostListened = () => {
         }, []);
     };
 
-    const getCurrentItemsForPlaylist = () => {
+    const getCurrentItemsForPlaylist = async () => {
         if (
             currentItemType === SpotifyItemTypes.RECENT_TRACK ||
             currentItemType === SpotifyItemTypes.TOP_TRACK
@@ -141,25 +138,52 @@ const SpotifyMostListened = () => {
         }
     }, [token, currentTimeRange]);
 
+    useEffect(() => {
+        if (token) {
+            (async () => {
+                if (numArtists > topArtists.length) {
+                    try {
+                        setIsLoading(true);
+
+                        setTopArtists(
+                            await fetchUserTopArtists(
+                                token,
+                                currentTimeRange,
+                                numArtists
+                            )
+                        );
+                        setIsLoading(false);
+                        setIsErrorFetching(false);
+                    } catch (e) {
+                        handleFetchingError(e);
+                    }
+                }
+            })();
+        }
+    }, [token, numArtists]);
+
     const showItemList =
         !isErrorFetching && recentTracks && recentTracks.length;
     const showMessage = !isCreatePlaylistModalOpen && message.message;
 
     return (
         <PageWrapper>
-            <div className="page-container" style={{
-				    height: "100%",
-					width: "100%",
-					/* display: inline-flex; */
-					flexDirection: "column",
-					display: "flex"
-			}}>
+            <div
+                className="page-container"
+                style={{
+                    height: "100%",
+                    width: "100%",
+                    /* display: inline-flex; */
+                    flexDirection: "column",
+                    display: "flex",
+                }}
+            >
                 <SpotifyItemListNavbar
                     currentItemType={currentItemType}
                     setCurrentItemType={setCurrentItemType}
                 />
 
-                <main style={{flexGrow: 1}}>
+                <main style={{ flexGrow: 1 }}>
                     {showItemList && (
                         <SpotifyItemListPanel
                             items={getCurrentSpotifyItemsWithoutDuplicates()}
@@ -172,6 +196,9 @@ const SpotifyMostListened = () => {
                             }
                             timeRange={currentTimeRange}
                             setTimeRange={setCurrentTimeRange}
+                            itemType={currentItemType}
+                            numArtists={numArtists}
+                            setNumArtists={setNumArtists}
                         />
                     )}
 
@@ -188,18 +215,23 @@ const SpotifyMostListened = () => {
                         isOpen={showMessage}
                     />
 
-                    <CreatePlaylistModal
-                        token={token}
-                        userId={userInfo.id}
-                        handleCloseModal={() =>
-                            setIsCreatePlaylistModalOpen(false)
-                        }
-                        getCurrentItemsForPlaylist={getCurrentItemsForPlaylist}
-                        showMessage={displayMessage}
-                        isOpen={isCreatePlaylistModalOpen}
-                        numSongsFromArtist={numSongsFromArtist}
-                        setNumSongsFromArtist={setNumSongsFromArtist}
-                    />
+                    {isCreatePlaylistModalOpen && (
+                        <CreatePlaylistModal
+                            token={token}
+                            userId={userInfo.id}
+                            handleCloseModal={() =>
+                                setIsCreatePlaylistModalOpen(false)
+                            }
+                            getCurrentItemsForPlaylist={
+                                getCurrentItemsForPlaylist
+                            }
+                            showMessage={displayMessage}
+                            isOpen={isCreatePlaylistModalOpen}
+                            numSongsFromArtist={numSongsFromArtist}
+                            setNumSongsFromArtist={setNumSongsFromArtist}
+                            itemType={currentItemType}
+                        />
+                    )}
                 </main>
             </div>
         </PageWrapper>
