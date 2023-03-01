@@ -12,30 +12,48 @@ const SongsInPlaylistSelection = ({
     selectAll,
 	numSongsFromArtist,
     setNumSongsFromArtist,
+    numArtists,
+    setNumArtists,
     itemType
 }) => {
-	const [sliderValue, setSliderValue] = useState(numSongsFromArtist);
-
+	const [itemsPerArtistSliderValue, setItemsPerArtistSliderValue] = useState(numSongsFromArtist);
+    const [numArtistsSliderValue, setNumArtistsSliderValue] = useState(numArtists);
+    
     return (
         itemsInPlaylist && (
             <div className="songs-in-playlist-selection">
-                <div style={{ marginTop: "20px" }} className="select">
+               { itemType === SpotifyItemTypes.ARTIST && <div style={{ marginTop: "20px" }} className="select">
                     <Typography variant="body1" fontWeight={"bolder"}>
                         Items Per Artist
                     </Typography>
-                    {
-                        itemType === SpotifyItemTypes.ARTIST && <Slider
+                    
+                    <Slider
                         gutterbottom
                         valueLabelDisplay="auto"
                         step={1}
                         min={1}
                         max={10}
-                        value={sliderValue}
-                        onChange={(e) => {setSliderValue(e.target.value)}}
-                        onChangeCommitted={(e) => {setNumSongsFromArtist(sliderValue)}}
+                        value={itemsPerArtistSliderValue}
+                        onChange={(e) => {setItemsPerArtistSliderValue(e.target.value)}}
+                        onChangeCommitted={(e) => {setNumSongsFromArtist(itemsPerArtistSliderValue)}}
                     />
-}
-                </div>
+
+<Typography variant="body1" fontWeight={"bolder"}>
+                        Number of artists
+                    </Typography>
+                    
+                    <Slider
+                        gutterbottom
+                        valueLabelDisplay="auto"
+                        step={1}
+                        min={1}
+                        max={50}
+                        value={numArtistsSliderValue}
+                        onChange={(e) => {setNumArtistsSliderValue(e.target.value)}}
+                        onChangeCommitted={(e) => {setNumArtists(numArtistsSliderValue)}}
+                    />
+
+                </div>}
 
                 <div style={{ display: "flex", justifyContent: "end" }}>
                     <Button onClick={selectAll} type="button" variant="text">

@@ -43,7 +43,7 @@ const SpotifyMostListened = () => {
             case SpotifyItemTypes.RECENT_TRACK:
                 return recentTracks;
             case SpotifyItemTypes.ARTIST:
-                return topArtists.slice(0, numArtists);
+                return topArtists;
             case SpotifyItemTypes.TOP_TRACK:
                 return topTracks;
             default:
@@ -83,7 +83,8 @@ const SpotifyMostListened = () => {
         ) {
             return getCurrentSpotifyItemsWithoutDuplicates();
         } else if (currentItemType === SpotifyItemTypes.ARTIST) {
-            const artistIds = topArtists.map(({ id }) => id);
+            const artistsForPlaylist = topArtists.slice(0, numArtists);
+            const artistIds = artistsForPlaylist.map(({ id }) => id);
 
             return getTopSongsFromArtists(token, artistIds, numSongsFromArtist);
         }
@@ -121,7 +122,7 @@ const SpotifyMostListened = () => {
                         await fetchUserTopArtists(
                             token,
                             currentTimeRange,
-                            numArtists
+                            50
                         )
                     );
                     setTopTracks(
@@ -137,30 +138,6 @@ const SpotifyMostListened = () => {
             })();
         }
     }, [token, currentTimeRange]);
-
-    useEffect(() => {
-        if (token) {
-            (async () => {
-                if (numArtists > topArtists.length) {
-                    try {
-                        setIsLoading(true);
-
-                        setTopArtists(
-                            await fetchUserTopArtists(
-                                token,
-                                currentTimeRange,
-                                numArtists
-                            )
-                        );
-                        setIsLoading(false);
-                        setIsErrorFetching(false);
-                    } catch (e) {
-                        handleFetchingError(e);
-                    }
-                }
-            })();
-        }
-    }, [token, numArtists]);
 
     const showItemList =
         !isErrorFetching && recentTracks && recentTracks.length;
@@ -229,6 +206,8 @@ const SpotifyMostListened = () => {
                             isOpen={isCreatePlaylistModalOpen}
                             numSongsFromArtist={numSongsFromArtist}
                             setNumSongsFromArtist={setNumSongsFromArtist}
+                            numArtists={numArtists}
+                            setNumArtists={setNumArtists}
                             itemType={currentItemType}
                         />
                     )}

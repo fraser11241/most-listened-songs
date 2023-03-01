@@ -31,6 +31,8 @@ const CreatePlaylistModal = ({
 	showMessage,
 	numSongsFromArtist,
 	setNumSongsFromArtist,
+	numArtists,
+	setNumArtists,
 	itemType
 }) => {
 	const [itemsInPlaylist, setItemsInPlaylist] = useState();
@@ -183,6 +185,8 @@ const CreatePlaylistModal = ({
 						toggleIsIncludedInPlaylist={toggleIsIncludedInPlaylist}
 						numSongsFromArtist={numSongsFromArtist}
 						setNumSongsFromArtist={setNumSongsFromArtist}
+						numArtists={numArtists}
+						setNumArtists={setNumArtists}
 						itemType={itemType}
 					/>
 				</DialogContent>

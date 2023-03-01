@@ -35,7 +35,7 @@ const MessageModal = ({ handleCloseModal, message, isOpen }) => {
         >
             <DialogTitle id="dialog-title">
                 <p className="modal-card-title">
-                    {state !== MessageState.ERROR ? messageText : "Error"}
+                    {messageText}
                 </p>
             </DialogTitle>
             <DialogContent>
@@ -52,7 +52,7 @@ const MessageModal = ({ handleCloseModal, message, isOpen }) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleCloseModal}>Close</Button>
-                <Button href={playlistLink}>View Playlist</Button>
+                {state !== MessageState.ERROR && <Button href={playlistLink}>View Playlist</Button>}
             </DialogActions>
         </Dialog>
     );
