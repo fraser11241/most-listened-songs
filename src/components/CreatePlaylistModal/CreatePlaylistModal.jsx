@@ -33,7 +33,7 @@ const CreatePlaylistModal = ({
 	setNumSongsFromArtist,
 	numArtists,
 	setNumArtists,
-	itemType
+	itemType,
 }) => {
 	const [itemsInPlaylist, setItemsInPlaylist] = useState();
 	const [playlistName, setPlaylistName] = useState("Playlist Name");
@@ -137,65 +137,64 @@ const CreatePlaylistModal = ({
 				})
 			);
 		});
-	}
+	};
 
 	useEffect(() => {
 		getItemsForSelection();
 	}, [getCurrentItemsForPlaylist, numSongsFromArtist]);
 
 	return (
-			<Dialog
-				open={isOpen}
-				onClose={handleCloseModal}
-				aria-labelledby="dialog-title"
-				aria-describedby="dialog-description"
-			>
+		<Dialog
+			open={isOpen}
+			onClose={handleCloseModal}
+			aria-labelledby="dialog-title"
+			aria-describedby="dialog-description"
+			fullScreen
+		>
+			<DialogTitle id="dialog-title">Create Playlist</DialogTitle>
+			<DialogContent>
+				<DialogContentText id="dialog-description"></DialogContentText>
 
-				<DialogTitle id="dialog-title">Create Playlist</DialogTitle>
-				<DialogContent>
-					<DialogContentText id="dialog-description"></DialogContentText>
+				<TextField
+					autoFocus
+					margin="dense"
+					label="Playlist Name"
+					fullWidth
+					variant="outlined"
+					value={playlistName}
+					onChange={(e) => {
+						setPlaylistName(e.target.value);
+					}}
+					required
+				/>
+				<TextField
+					margin="dense"
+					label="Playlist Description"
+					fullWidth
+					variant="outlined"
+					value={playlistDescription}
+					onChange={(e) => {
+						setPlaylistDescription(e.target.value);
+					}}
+				/>
 
-					<TextField
-						autoFocus
-						margin="dense"
-						label="Playlist Name"
-						fullWidth
-						variant="outlined"
-						value={playlistName}
-						onChange={(e) => {
-							setPlaylistName(e.target.value);
-						}}
-						required
-					/>
-					<TextField
-						margin="dense"
-						label="Playlist Description"
-						fullWidth
-						variant="outlined"
-						value={playlistDescription}
-						onChange={(e) => {
-							setPlaylistDescription(e.target.value);
-						}}
-					/>
-
-					<SongsInPlaylistSelection
-						itemsInPlaylist={itemsInPlaylist}
-						deselectAll={deselectAll}
-						selectAll={selectAll}
-						toggleIsIncludedInPlaylist={toggleIsIncludedInPlaylist}
-						numSongsFromArtist={numSongsFromArtist}
-						setNumSongsFromArtist={setNumSongsFromArtist}
-						numArtists={numArtists}
-						setNumArtists={setNumArtists}
-						itemType={itemType}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleCloseModal}>Cancel</Button>
-					<Button onClick={handleSubmit}>Create Playlist</Button>
-				</DialogActions>
-
-			</Dialog>
+				<SongsInPlaylistSelection
+					itemsInPlaylist={itemsInPlaylist}
+					deselectAll={deselectAll}
+					selectAll={selectAll}
+					toggleIsIncludedInPlaylist={toggleIsIncludedInPlaylist}
+					numSongsFromArtist={numSongsFromArtist}
+					setNumSongsFromArtist={setNumSongsFromArtist}
+					numArtists={numArtists}
+					setNumArtists={setNumArtists}
+					itemType={itemType}
+				/>
+			</DialogContent>
+			<DialogActions>
+				<Button onClick={handleCloseModal}>Cancel</Button>
+				<Button onClick={handleSubmit}>Create Playlist</Button>
+			</DialogActions>
+		</Dialog>
 	);
 };
 

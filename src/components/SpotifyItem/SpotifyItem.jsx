@@ -28,7 +28,12 @@ const SpotifyItem = ({ item, toggleButton, children }) => {
 
 	return (
 		<div className="spotify-item-container">
-			<img className="spotify-item-image" src={imageUrl} alt={title} />
+			<img
+				className="spotify-item-image"
+				src={imageUrl}
+				alt={title}
+				loading="lazy"
+			/>
 
 			<div className="text-container">
 				<Typography component={"span"} variant="body1">
