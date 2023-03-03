@@ -83,7 +83,6 @@ const SpotifyMostListened = () => {
 	};
 
 	const getCurrentItemsForPlaylist = async () => {
-		console.log("GETTING CURRENT ITEMS FOR PLAYLIST");
 		if (
 			currentItemType === SpotifyItemTypes.RECENT_TRACK ||
 			currentItemType === SpotifyItemTypes.TOP_TRACK
@@ -166,7 +165,7 @@ const SpotifyMostListened = () => {
 
 	const showItemList =
 		!isErrorFetching && recentTracks && recentTracks.length;
-	const showMessage = !isCreatePlaylistModalOpen && message.message;
+	const showMessage = !!(!isCreatePlaylistModalOpen && message.message);
 
 	return (
 		<PageWrapper>

@@ -1,11 +1,5 @@
-import {
-	Button,
-	ImageList,
-	ImageListItem,
-	ImageListItemBar,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import React, { useState } from "react";
+import { ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
+import React from "react";
 import SpotifyItem from "../SpotifyItem/SpotifyItem";
 import SpotifyItemSkeletonLoading from "../SpotifyItemSkeletonLoading/SpotifyItemSkeletonLoading";
 import BottomNav from "../BottomNav/BottomNav";

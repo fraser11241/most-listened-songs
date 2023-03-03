@@ -40,7 +40,7 @@ const BottomNav = ({
 				Create Playlist
 				<AddIcon />
 			</Fab>
-			<Slide in="true" direction="up" unmountOnExit>
+			<Slide in={true} direction="up" unmountOnExit>
 				<Paper elevation={3}>
 					<BottomNavigation
 						showLabels

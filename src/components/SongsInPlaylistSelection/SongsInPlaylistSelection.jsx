@@ -31,7 +31,6 @@ const SongsInPlaylistSelection = ({
 						</Typography>
 
 						<Slider
-							gutterbottom
 							valueLabelDisplay="auto"
 							step={1}
 							min={1}
@@ -52,7 +51,6 @@ const SongsInPlaylistSelection = ({
 						</Typography>
 
 						<Slider
-							gutterbottom
 							valueLabelDisplay="auto"
 							step={1}
 							min={1}
@@ -80,7 +78,7 @@ const SongsInPlaylistSelection = ({
 				<ol className="songs-in-playlist-selection">
 					{itemsInPlaylist.map(
 						({ item, isIncludedInPlaylist }, index) => (
-							<li>
+							<li key={item.id || index}>
 								<label
 									className={`spotify-item-checkbox-container ${
 										isIncludedInPlaylist
