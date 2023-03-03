@@ -27,10 +27,11 @@ const SongsInPlaylistSelection = ({
 				{itemType === SpotifyItemTypes.ARTIST && (
 					<div style={{ marginTop: "20px" }} className="select">
 						<Typography variant="body1" fontWeight={"bolder"}>
-							Items Per Artist
+							Songs Per Artist
 						</Typography>
 
 						<Slider
+							marks={true}
 							valueLabelDisplay="auto"
 							step={1}
 							min={1}
@@ -51,6 +52,7 @@ const SongsInPlaylistSelection = ({
 						</Typography>
 
 						<Slider
+							marks={true}
 							valueLabelDisplay="auto"
 							step={1}
 							min={1}
