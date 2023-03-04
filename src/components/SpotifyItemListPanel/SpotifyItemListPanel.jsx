@@ -23,10 +23,7 @@ const SpotifyItemListPanel = ({
 	timeRange,
 	setTimeRange,
 	itemType,
-	numArtists,
-	setNumArtists,
 }) => {
-	const [sliderValue, setSliderValue] = useState(numArtists);
 	const [showAsGrid, setShowAsGrid] = useState(false);
 	const [showImageCaption, setShowImageCaption] = useState(true);
 	const isEmpty = !isError && !items.length && !isLoading;

@@ -3,10 +3,11 @@ import React, { useState, useEffect } from "react";
 import SongsInPlaylistSelection from "../SongsInPlaylistSelection/SongsInPlaylistSelection";
 import {
 	createPlaylistFromSpotifyItems,
+	getGroupedTopSongsFromArtists,
 	getPlaylistImage,
 } from "../../requests/playlist";
 import { createMessageObject } from "../SpotifyMostListened/SpotifyMostListened";
-import { MessageState } from "../../enums/enums";
+import { MessageState, SpotifyItemTypes } from "../../enums/enums";
 
 import "./CreatePlaylistModal.scss";
 import {
@@ -27,17 +28,19 @@ const CreatePlaylistModal = ({
 	userId,
 	isOpen,
 	handleCloseModal,
-	getCurrentItemsForPlaylist,
+	items,
 	showMessage,
-	numSongsFromArtist,
-	setNumSongsFromArtist,
-	numArtists,
-	setNumArtists,
 	itemType,
 }) => {
 	const [itemsInPlaylist, setItemsInPlaylist] = useState();
 	const [playlistName, setPlaylistName] = useState("Playlist Name");
 	const [playlistDescription, setPlaylistDescription] = useState("");
+	const [numSongsFromArtist, setNumSongsFromArtist] = useState(5);
+	const [numArtists, setNumArtists] = useState(5);
+	const [groupedTopSongsFromArtists, setGroupedTopSongsFromArtist] = useState(
+		{}
+	);
+	const MAX_TOP_SONGS_FOR_ARTIST = 10;
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -126,8 +129,49 @@ const CreatePlaylistModal = ({
 		);
 	};
 
-	const getItemsForSelection = async () => {
-		getCurrentItemsForPlaylist().then((items) => {
+	useEffect(() => {
+		if (itemType === SpotifyItemTypes.ARTIST) {
+			(async () => {
+				let topSongsMap = groupedTopSongsFromArtists;
+				const topArtistIds = items.map(({ id }) => id);
+				const artistIdsForPlaylist = topArtistIds.slice(0, numArtists);
+
+				const artistsIdsWithMissingSongs = topArtistIds.filter(
+					(id) => !(id in groupedTopSongsFromArtists)
+				);
+
+				// Get any missing songs
+				if (artistsIdsWithMissingSongs.length) {
+					const missingSongs = await getGroupedTopSongsFromArtists(
+						token,
+						artistsIdsWithMissingSongs,
+						MAX_TOP_SONGS_FOR_ARTIST
+					);
+					const newArtistTopSongs = {
+						...groupedTopSongsFromArtists,
+						...missingSongs,
+					};
+					setGroupedTopSongsFromArtist(newArtistTopSongs);
+					topSongsMap = newArtistTopSongs;
+				}
+
+				const groupedSongsForEachArtist = artistIdsForPlaylist.map(
+					(id) => topSongsMap[id].slice(0, numSongsFromArtist)
+				);
+				const songsForEachArtistFlat = [].concat(
+					...groupedSongsForEachArtist
+				);
+
+				setItemsInPlaylist(
+					songsForEachArtistFlat.map((item) => {
+						return {
+							item,
+							isIncludedInPlaylist: true,
+						};
+					})
+				);
+			})();
+		} else {
 			setItemsInPlaylist(
 				items.map((item) => {
 					return {
@@ -136,12 +180,15 @@ const CreatePlaylistModal = ({
 					};
 				})
 			);
-		});
-	};
-
-	useEffect(() => {
-		getItemsForSelection();
-	}, [getCurrentItemsForPlaylist, numSongsFromArtist]);
+		}
+	}, [
+		groupedTopSongsFromArtists,
+		itemType,
+		items,
+		numArtists,
+		numSongsFromArtist,
+		token,
+	]);
 
 	return (
 		<Dialog

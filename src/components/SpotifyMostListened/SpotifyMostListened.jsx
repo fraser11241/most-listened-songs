@@ -35,14 +35,7 @@ const SpotifyMostListened = () => {
 	const [isCreatePlaylistModalOpen, setIsCreatePlaylistModalOpen] =
 		useState(false);
 	const [message, setMessage] = useState({});
-	const [numArtists, setNumArtists] = useState(10);
-	const [numSongsFromArtist, setNumSongsFromArtist] = useState(5);
-	const [groupedTopSongsFromArtists, setGroupedTopSongsFromArtist] = useState(
-		{}
-	);
 	const { token } = useContext(loginContext);
-
-	const MAX_TOP_SONGS_FOR_ARTIST = 10;
 
 	const getCurrentSpotifyItems = () => {
 		switch (currentItemType) {
@@ -80,42 +73,6 @@ const SpotifyMostListened = () => {
 			setOfNames.add(value.name);
 			return [...arr, value];
 		}, []);
-	};
-
-	const getCurrentItemsForPlaylist = async () => {
-		if (
-			currentItemType === SpotifyItemTypes.RECENT_TRACK ||
-			currentItemType === SpotifyItemTypes.TOP_TRACK
-		) {
-			return getCurrentSpotifyItemsWithoutDuplicates();
-		} else if (currentItemType === SpotifyItemTypes.ARTIST) {
-			let topSongsMap = groupedTopSongsFromArtists;
-			const topArtistIds = topArtists.map(({ id }) => id);
-			const artistIdsForPlaylist = topArtistIds.slice(0, numArtists);
-
-			const artistsIdsWithMissingSongs = topArtistIds.filter(
-				(id) => !(id in groupedTopSongsFromArtists)
-			);
-
-			if (artistsIdsWithMissingSongs.length) {
-				const missingSongs = await getGroupedTopSongsFromArtists(
-					token,
-					artistsIdsWithMissingSongs,
-					MAX_TOP_SONGS_FOR_ARTIST
-				);
-				const newArtistTopSongs = {
-					...groupedTopSongsFromArtists,
-					...missingSongs,
-				};
-				setGroupedTopSongsFromArtist(newArtistTopSongs);
-				topSongsMap = newArtistTopSongs;
-			}
-
-			const artistSongsToInclude = artistIdsForPlaylist.map((id) =>
-				topSongsMap[id].slice(0, numSongsFromArtist)
-			);
-			return [].concat(...artistSongsToInclude);
-		}
 	};
 
 	const handleFetchingError = (e) => {
@@ -198,8 +155,6 @@ const SpotifyMostListened = () => {
 							timeRange={currentTimeRange}
 							setTimeRange={setCurrentTimeRange}
 							itemType={currentItemType}
-							numArtists={numArtists}
-							setNumArtists={setNumArtists}
 						/>
 					)}
 
@@ -223,15 +178,9 @@ const SpotifyMostListened = () => {
 							handleCloseModal={() =>
 								setIsCreatePlaylistModalOpen(false)
 							}
-							getCurrentItemsForPlaylist={
-								getCurrentItemsForPlaylist
-							}
+							items={getCurrentSpotifyItemsWithoutDuplicates()}
 							showMessage={displayMessage}
 							isOpen={isCreatePlaylistModalOpen}
-							numSongsFromArtist={numSongsFromArtist}
-							setNumSongsFromArtist={setNumSongsFromArtist}
-							numArtists={numArtists}
-							setNumArtists={setNumArtists}
 							itemType={currentItemType}
 						/>
 					)}
