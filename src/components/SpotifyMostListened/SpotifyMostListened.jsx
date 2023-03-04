@@ -64,13 +64,13 @@ const SpotifyMostListened = () => {
 	};
 
 	const getCurrentSpotifyItemsWithoutDuplicates = () => {
-		const setOfNames = new Set();
+		const setOfIds = new Set();
 		return getCurrentSpotifyItems().reduce((arr, value) => {
-			if (setOfNames.has(value.name)) {
+			if (setOfIds.has(value.id)) {
 				return arr;
 			}
 
-			setOfNames.add(value.name);
+			setOfIds.add(value.id);
 			return [...arr, value];
 		}, []);
 	};
