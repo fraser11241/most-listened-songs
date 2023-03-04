@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import SpotifyItemList from "../SpotifyItemList/SpotifyItemList";
+import TopArtistSongSlider from "../TopArtistSongSliders/TopArtistSongSlider";
 
 // TODO Add slider for number of items from each artist for artist creating playlist
 const CreatePlaylistModal = ({
@@ -225,16 +226,20 @@ const CreatePlaylistModal = ({
 					}}
 				/>
 
+				{itemType === SpotifyItemTypes.ARTIST && (
+					<TopArtistSongSlider
+						numArtists={numArtists}
+						setNumArtists={setNumArtists}
+						numSongsFromArtist={numSongsFromArtist}
+						setNumSongsFromArtist={setNumSongsFromArtist}
+					/>
+				)}
+
 				<SongsInPlaylistSelection
 					itemsInPlaylist={itemsInPlaylist}
 					deselectAll={deselectAll}
 					selectAll={selectAll}
 					toggleIsIncludedInPlaylist={toggleIsIncludedInPlaylist}
-					numSongsFromArtist={numSongsFromArtist}
-					setNumSongsFromArtist={setNumSongsFromArtist}
-					numArtists={numArtists}
-					setNumArtists={setNumArtists}
-					itemType={itemType}
 				/>
 			</DialogContent>
 			<DialogActions>
