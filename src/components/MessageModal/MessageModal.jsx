@@ -26,7 +26,7 @@ const MessageModal = ({ handleCloseModal, message, isOpen }) => {
 		playlistLink,
 		playlistImage,
 	} = message;
-	console.log("IS OPEN", isOpen);
+
 	return (
 		<Dialog
 			open={!!isOpen}

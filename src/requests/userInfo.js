@@ -22,10 +22,10 @@ export const fetchUserRecentTracks = async (
 	);
 
 	const recentTracks = items.map((item) => {
-		const { artists, name, uri } = item.track;
+		const { artists, name, uri, id } = item.track;
 		const image = item.track.album.images[0];
 
-		return { artists, name, image, uri };
+		return { artists, name, image, uri, id };
 	});
 	return recentTracks;
 };

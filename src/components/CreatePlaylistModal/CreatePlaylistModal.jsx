@@ -18,6 +18,7 @@ import {
 	DialogTitle,
 	Button,
 	TextField,
+	Paper,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import SpotifyItemList from "../SpotifyItemList/SpotifyItemList";
@@ -32,6 +33,7 @@ const CreatePlaylistModal = ({
 	items,
 	showMessage,
 	itemType,
+	children,
 }) => {
 	const [itemsInPlaylist, setItemsInPlaylist] = useState();
 	const [playlistName, setPlaylistName] = useState("Playlist Name");
@@ -41,19 +43,28 @@ const CreatePlaylistModal = ({
 	const [groupedTopSongsFromArtists, setGroupedTopSongsFromArtist] = useState(
 		{}
 	);
+	const DEFAULT_PLAYLIST_NAME = "Spotify Playlist";
 	const MAX_TOP_SONGS_FOR_ARTIST = 10;
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		try {
-			const spotifyItemsToIncludeInPlaylist = itemsInPlaylist.reduce(
-				(arr, { item, isIncludedInPlaylist }) => {
-					if (isIncludedInPlaylist) {
-						return [...arr, item];
-					} else {
-						return arr;
+			const playlistName =
+				e.target.playlistName.value || DEFAULT_PLAYLIST_NAME;
+			const playlistDescription = e.target.playlistDescription.value;
+
+			const songCheckboxes = Array.from(e.target.playlistSong);
+			if (!songCheckboxes) {
+				throw new Error("No songs to add to playlist");
+			}
+
+			const spotifyItemsToIncludeInPlaylist = songCheckboxes.reduce(
+				(arr, { checked: isIncluded }, index) => {
+					if (isIncluded) {
+						return [...arr, itemsInPlaylist[index]];
 					}
+					return arr;
 				},
 				[]
 			);
@@ -65,7 +76,6 @@ const CreatePlaylistModal = ({
 				playlistDescription || "",
 				spotifyItemsToIncludeInPlaylist
 			);
-
 			if (playlistId) {
 				const createdPlaylistUri = `spotify:playlist:${playlistId}`;
 				const createdPlaylistImage = await getPlaylistImage(
@@ -108,28 +118,6 @@ const CreatePlaylistModal = ({
 		);
 	};
 
-	const deselectAll = () => {
-		setItemsInPlaylist(
-			itemsInPlaylist.map((item) => {
-				return {
-					...item,
-					isIncludedInPlaylist: false,
-				};
-			})
-		);
-	};
-
-	const selectAll = () => {
-		setItemsInPlaylist(
-			itemsInPlaylist.map((item) => {
-				return {
-					...item,
-					isIncludedInPlaylist: true,
-				};
-			})
-		);
-	};
-
 	useEffect(() => {
 		if (itemType === SpotifyItemTypes.ARTIST) {
 			(async () => {
@@ -163,24 +151,10 @@ const CreatePlaylistModal = ({
 					...groupedSongsForEachArtist
 				);
 
-				setItemsInPlaylist(
-					songsForEachArtistFlat.map((item) => {
-						return {
-							item,
-							isIncludedInPlaylist: true,
-						};
-					})
-				);
+				setItemsInPlaylist([...songsForEachArtistFlat]);
 			})();
 		} else {
-			setItemsInPlaylist(
-				items.map((item) => {
-					return {
-						item,
-						isIncludedInPlaylist: true,
-					};
-				})
-			);
+			setItemsInPlaylist([...items]);
 		}
 	}, [
 		groupedTopSongsFromArtists,
@@ -193,37 +167,35 @@ const CreatePlaylistModal = ({
 
 	return (
 		<Dialog
+			con
 			open={isOpen}
 			onClose={handleCloseModal}
 			aria-labelledby="dialog-title"
 			aria-describedby="dialog-description"
 			fullScreen
+			component="form"
+			onSubmit={handleSubmit}
 		>
 			<DialogTitle id="dialog-title">Create Playlist</DialogTitle>
 			<DialogContent>
 				<DialogContentText id="dialog-description"></DialogContentText>
 
 				<TextField
+					name="playlistName"
+					defaultValue={DEFAULT_PLAYLIST_NAME}
 					autoFocus
 					margin="dense"
 					label="Playlist Name"
 					fullWidth
 					variant="outlined"
-					value={playlistName}
-					onChange={(e) => {
-						setPlaylistName(e.target.value);
-					}}
 					required
 				/>
 				<TextField
+					name="playlistDescription"
 					margin="dense"
 					label="Playlist Description"
 					fullWidth
 					variant="outlined"
-					value={playlistDescription}
-					onChange={(e) => {
-						setPlaylistDescription(e.target.value);
-					}}
 				/>
 
 				{itemType === SpotifyItemTypes.ARTIST && (
@@ -235,16 +207,13 @@ const CreatePlaylistModal = ({
 					/>
 				)}
 
-				<SongsInPlaylistSelection
-					itemsInPlaylist={itemsInPlaylist}
-					deselectAll={deselectAll}
-					selectAll={selectAll}
-					toggleIsIncludedInPlaylist={toggleIsIncludedInPlaylist}
-				/>
+				<SongsInPlaylistSelection itemsInPlaylist={itemsInPlaylist} />
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={handleCloseModal}>Cancel</Button>
-				<Button onClick={handleSubmit}>Create Playlist</Button>
+				<Button type="button" onClick={handleCloseModal}>
+					Cancel
+				</Button>
+				<Button type="submit">Create Playlist</Button>
 			</DialogActions>
 		</Dialog>
 	);

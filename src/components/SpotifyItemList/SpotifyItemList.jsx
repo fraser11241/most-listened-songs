@@ -6,8 +6,8 @@ import BottomNav from "../BottomNav/BottomNav";
 import "./SpotifyItemList.scss";
 
 const SkeletonLoadingItems = () =>
-	[...Array(10)].map(() => (
-		<li>
+	[...Array(10)].map((_, index) => (
+		<li key={index}>
 			<SpotifyItemSkeletonLoading />
 		</li>
 	));
@@ -31,10 +31,11 @@ const ImageGrid = ({ items, showImageCaption }) => {
 		<div className="image-grid">
 			<ImageList className="image-grid" gap={8}>
 				{items.map((item) => {
-					const { title, subtitle, imageUrl, previewUrl } =
+					const { title, subtitle, imageUrl, previewUrl, id } =
 						getContentForItem(item);
 					return (
 						<ImageListItem
+							key={id}
 							className={
 								!showImageCaption && "hide-image-caption"
 							}
@@ -76,7 +77,7 @@ const SpotifyItemList = ({
 					{!isLoading &&
 						items.map((item) => {
 							return (
-								<li>
+								<li key={item.id}>
 									<SpotifyItem item={item} />
 								</li>
 							);
