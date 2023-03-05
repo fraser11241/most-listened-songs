@@ -24,7 +24,7 @@ const SpotifyItemList = ({
 					isLoading={isLoading}
 				/>
 			) : (
-				<SpotifyItemListView items={items} isLoading={isLoading} />
+					<SpotifyItemListView items={items} isLoading={isLoading} />
 			)}
 
 			{!isLoading && (

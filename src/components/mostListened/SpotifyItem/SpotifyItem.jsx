@@ -23,7 +23,7 @@ const styles = {
 		alignItems: "center",
 		"& img": {
 			display: "inline-block",
-			aspectRatio: 1,
+			aspectRatio: "1",
 			objectFit: "cover",
 			height: "100%",
 			marginRight: "10px",
@@ -48,7 +48,6 @@ const SpotifyItem = ({ item, children, styles: stylesProp }) => {
 	return (
 		<Box sx={{ ...styles.itemContainer, ...(stylesProp || {}) }}>
 			<img
-				className="spotify-item-image"
 				src={imageUrl}
 				alt={title}
 				loading="lazy"
@@ -68,4 +67,5 @@ const SpotifyItem = ({ item, children, styles: stylesProp }) => {
 	);
 };
 
+export {styles}
 export default SpotifyItem;
