@@ -1,7 +1,6 @@
 export const genericErrorHandler = (response) => {
 	if (!response.ok) {
 		const errorMessage = response.status === 401 ? "Token expired" : null;
-
 		throw Error(
 			errorMessage ||
 				response.statusText ||

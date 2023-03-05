@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import { SpotifyItemTypes, TimeRanges, MessageState } from "../../enums/enums";
+import { SpotifyItemTypes, TimeRanges, MessageState } from "../../config/enums";
 import {
 	fetchUserInfo,
 	fetchUserRecentTracks,
@@ -78,8 +78,14 @@ const SpotifyMostListened = () => {
 	};
 
 	const handleFetchingError = (e) => {
+		console.error("Error occurred while fetching", e);
 		setIsErrorFetching(true);
-		setErrorMessage("There was an error fetching user info.");
+
+		if (e.message === "Token expired") {
+			setErrorMessage("Token has expired");
+		} else {
+			setErrorMessage("Error occurred whilst fetching");
+		}
 	};
 
 	const displayMessage = (

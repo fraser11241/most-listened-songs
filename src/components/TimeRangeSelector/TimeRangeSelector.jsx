@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@mui/material";
 
-import { TimeRanges } from "../../enums/enums";
+import { TimeRanges } from "../../config/enums";
 
 const TimeRangeSelector = ({ timeRange, setTimeRange }) => {
 	const timeRangeText = {
@@ -17,8 +17,9 @@ const TimeRangeSelector = ({ timeRange, setTimeRange }) => {
 				flexWrap: "wrap",
 			}}
 		>
-			{Object.entries(timeRangeText).map(([value, text]) => (
+			{Object.entries(timeRangeText).map(([value, text], index) => (
 				<Button
+					key={index}
 					className={+value === +timeRange ? "active" : ""}
 					sx={{
 						color: "gray",

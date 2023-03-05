@@ -7,7 +7,7 @@ import {
 	getPlaylistImage,
 } from "../../requests/playlist";
 import { createMessageObject } from "../SpotifyMostListened/SpotifyMostListened";
-import { MessageState, SpotifyItemTypes } from "../../enums/enums";
+import { MessageState, SpotifyItemTypes } from "../../config/enums";
 
 import "./CreatePlaylistModal.scss";
 import {

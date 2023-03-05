@@ -5,12 +5,7 @@ import SpotifyItem from "../SpotifyItem/SpotifyItem";
 import "./SongsInPlaylistSelection.scss";
 import { Box } from "@mui/system";
 
-const SongsInPlaylistSelection = ({
-	// toggleIsIncludedInPlaylist,
-	itemsInPlaylist,
-	// deselectAll,
-	// selectAll,
-}) => {
+const SongsInPlaylistSelection = ({ itemsInPlaylist }) => {
 	const [isIncludedInPlaylist, setIsIncludedInPlaylist] = useState(
 		itemsInPlaylist?.length ? itemsInPlaylist.map(() => true) : []
 	);
@@ -23,6 +18,14 @@ const SongsInPlaylistSelection = ({
 		);
 	};
 
+	const selectAll = () => {
+		setIsIncludedInPlaylist(itemsInPlaylist.map(() => true));
+	};
+
+	const deselectAll = () => {
+		setIsIncludedInPlaylist(itemsInPlaylist.map(() => false));
+	};
+
 	useEffect(() => {
 		setIsIncludedInPlaylist(
 			itemsInPlaylist?.length ? itemsInPlaylist.map(() => true) : []
@@ -33,10 +36,10 @@ const SongsInPlaylistSelection = ({
 		itemsInPlaylist && (
 			<Box>
 				<div style={{ display: "flex", justifyContent: "end" }}>
-					<Button onClick={() => {}} type="button" variant="text">
+					<Button onClick={selectAll} type="button" variant="text">
 						Select all
 					</Button>
-					<Button onClick={() => {}} type="button" variant="text">
+					<Button onClick={deselectAll} type="button" variant="text">
 						Deselect all
 					</Button>
 				</div>

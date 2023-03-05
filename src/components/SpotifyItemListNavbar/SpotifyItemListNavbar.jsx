@@ -1,6 +1,6 @@
 import { Tab, Tabs } from "@mui/material";
 import React from "react";
-import { SpotifyItemTypes } from "../../enums/enums";
+import { SpotifyItemTypes } from "../../config/enums";
 
 import "./SpotifyItemListNavbar.scss";
 

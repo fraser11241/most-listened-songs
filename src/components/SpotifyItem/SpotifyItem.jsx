@@ -36,11 +36,11 @@ const SpotifyItem = ({ item, toggleButton, children }) => {
 			/>
 
 			<div className="text-container">
-				<Typography component={"span"} variant="body1">
+				<Typography component={"span"} variant="body1" noWrap>
 					{title}
 				</Typography>
 				{subtitle && (
-					<Typography variant="body2" color="#424242">
+					<Typography variant="body2" color="#424242" noWrap>
 						{subtitle}
 					</Typography>
 				)}

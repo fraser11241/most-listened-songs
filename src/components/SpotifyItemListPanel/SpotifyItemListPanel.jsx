@@ -6,7 +6,7 @@ import {
 	Typography,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { SpotifyItemTypes } from "../../enums/enums";
+import { SpotifyItemTypes } from "../../config/enums";
 
 import EmptyIndicator from "../EmptyIndicator/EmptyIndicator";
 import SpotifyItemList from "../SpotifyItemList/SpotifyItemList";
@@ -70,10 +70,12 @@ const SpotifyItemListPanel = ({
 							</Typography>
 						)}
 
-						<TimeRangeSelector
-							timeRange={timeRange}
-							setTimeRange={setTimeRange}
-						/>
+						{itemType !== SpotifyItemTypes.RECENT_TRACK && (
+							<TimeRangeSelector
+								timeRange={timeRange}
+								setTimeRange={setTimeRange}
+							/>
+						)}
 					</div>
 
 					{showAsGrid && (

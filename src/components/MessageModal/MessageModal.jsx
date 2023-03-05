@@ -9,7 +9,7 @@ import {
 	Typography,
 } from "@mui/material";
 import React from "react";
-import { MessageState } from "../../enums/enums";
+import { MessageState } from "../../config/enums";
 
 import "./MessageModal.scss";
 
