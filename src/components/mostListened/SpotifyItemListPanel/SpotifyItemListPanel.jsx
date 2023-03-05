@@ -1,13 +1,12 @@
+import React, { useState } from "react";
 import {
 	Checkbox,
 	Container,
 	FormControlLabel,
-	Slider,
 	Typography,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
-import { SpotifyItemTypes } from "config/enums";
 
+import { SpotifyItemTypes } from "config/enums";
 import EmptyIndicator from "components/common/EmptyIndicator/EmptyIndicator";
 import TimeRangeSelector from "components/forms/TimeRangeSelector/TimeRangeSelector";
 import SpotifyItemList from "components/mostListened/SpotifyItemList/SpotifyItemList";

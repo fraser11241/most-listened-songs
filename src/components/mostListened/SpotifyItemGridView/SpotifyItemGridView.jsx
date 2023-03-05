@@ -20,7 +20,7 @@ const SpotifyItemGridView = ({ items, showImageCaption }) => {
 		<div className="image-grid">
 			<ImageList className="image-grid" gap={8}>
 				{items.map((item) => {
-					const { title, subtitle, imageUrl, previewUrl, id } =
+					const { title, subtitle, imageUrl, id } =
 						getContentForItem(item);
 					return (
 						<ImageListItem

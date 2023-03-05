@@ -1,13 +1,5 @@
-import {
-	List,
-	ListItem,
-	ListItemAvatar,
-	Typography,
-	Avatar,
-	Divider,
-	ListItemText,
-} from "@mui/material";
 import React from "react";
+import { Typography } from "@mui/material";
 
 import "./SpotifyItem.scss";
 

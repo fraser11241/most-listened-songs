@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Slider, Switch, Typography } from "@mui/material";
+import { Button, Switch } from "@mui/material";
+import { Box } from "@mui/system";
+
 import SpotifyItem from "components/mostListened/SpotifyItem/SpotifyItem";
 
 import "./SongsInPlaylistSelection.scss";
-import { Box } from "@mui/system";
 
 const SongsInPlaylistSelection = ({ itemsInPlaylist }) => {
 	const [isIncludedInPlaylist, setIsIncludedInPlaylist] = useState(

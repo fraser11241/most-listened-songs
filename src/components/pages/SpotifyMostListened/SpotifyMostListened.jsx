@@ -147,8 +147,7 @@ const SpotifyMostListened = () => {
 		}
 	}, [token, currentTimeRange, handleFetchingError]);
 
-	const showItemList =
-		!isErrorFetching && recentTracks && recentTracks.length;
+	const showItemList = !isErrorFetching;
 	const showMessage = !!(!isCreatePlaylistModalOpen && message.message);
 
 	return (
