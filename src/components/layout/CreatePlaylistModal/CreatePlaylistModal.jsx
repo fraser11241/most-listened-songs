@@ -18,8 +18,6 @@ import {
 import { MessageState, SpotifyItemTypes } from "config/enums";
 import TopArtistSongSlider from "components/forms/TopArtistSongSliders/TopArtistSongSlider";
 
-import "./CreatePlaylistModal.scss";
-
 const CreatePlaylistModal = ({
 	token,
 	userId,

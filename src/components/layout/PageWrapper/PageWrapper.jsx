@@ -1,12 +1,11 @@
+import { Box } from "@mui/system";
 import React from "react";
-
-import "./PageWrapper.scss";
 
 const PageWrapper = ({ children }) => {
 	return (
-		<div className="page-wrapper" id="page-wrapper">
+		<Box minHeight="100vh" height="100%" id="page-wrapper">
 			{children}
-		</div>
+		</Box>
 	);
 };
 

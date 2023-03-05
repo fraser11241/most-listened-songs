@@ -10,8 +10,6 @@ import {
 
 import { MessageState } from "config/enums";
 
-import "./MessageModal.scss";
-
 const MessageModal = ({ handleCloseModal, message, isOpen }) => {
 	const {
 		message: messageText,
@@ -26,9 +24,7 @@ const MessageModal = ({ handleCloseModal, message, isOpen }) => {
 			onClose={handleCloseModal}
 			aria-labelledby="dialog-title"
 		>
-			<DialogTitle id="dialog-title">
-				<p className="modal-card-title">{messageText}</p>
-			</DialogTitle>
+			<DialogTitle id="dialog-title">{messageText}</DialogTitle>
 			<DialogContent>
 				<section>
 					<Typography>

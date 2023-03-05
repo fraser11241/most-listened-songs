@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Typography, Slider } from "@mui/material";
+import { Box } from "@mui/system";
 
 const TopArtistSongSlider = ({
 	numArtists,
@@ -13,7 +14,7 @@ const TopArtistSongSlider = ({
 		useState(numArtists);
 
 	return (
-		<div style={{ marginTop: "20px" }} className="select">
+		<Box sx={{ marginTop: 2 }}>
 			<Typography variant="body1" fontWeight={"bolder"}>
 				Songs Per Artist
 			</Typography>
@@ -31,6 +32,7 @@ const TopArtistSongSlider = ({
 				onChangeCommitted={(e) => {
 					setNumSongsFromArtist(itemsPerArtistSliderValue);
 				}}
+				aria-label="Songs per artist"
 			/>
 
 			<Typography variant="body1" fontWeight={"bolder"}>
@@ -50,8 +52,9 @@ const TopArtistSongSlider = ({
 				onChangeCommitted={(e) => {
 					setNumArtists(numArtistsSliderValue);
 				}}
+				aria-label="Number of artists"
 			/>
-		</div>
+		</Box>
 	);
 };
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@mui/material";
 
 import { TimeRanges } from "config/enums";
+import { Box } from "@mui/system";
 
 const TimeRangeSelector = ({ timeRange, setTimeRange }) => {
 	const timeRangeText = {
@@ -11,12 +12,7 @@ const TimeRangeSelector = ({ timeRange, setTimeRange }) => {
 	};
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexWrap: "wrap",
-			}}
-		>
+		<Box display="flex" flexWrap="wrap">
 			{Object.entries(timeRangeText).map(([value, text], index) => (
 				<Button
 					key={index}
@@ -37,7 +33,7 @@ const TimeRangeSelector = ({ timeRange, setTimeRange }) => {
 					{text}
 				</Button>
 			))}
-		</div>
+		</Box>
 	);
 };
 

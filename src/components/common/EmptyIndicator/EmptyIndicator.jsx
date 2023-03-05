@@ -1,7 +1,8 @@
+import { Typography } from "@mui/material";
 import React from "react";
 
 const EmptyIndicator = () => {
-  return <p>No content to show</p>;
+	return <Typography variant="p">No content to show</Typography>;
 };
 
 export default EmptyIndicator;

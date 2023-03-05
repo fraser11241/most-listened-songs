@@ -9,6 +9,7 @@ import {
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import AppsIcon from "@mui/icons-material/Apps";
 import AddIcon from "@mui/icons-material/Add";
+import { Box } from "@mui/system";
 
 const BottomNav = ({
 	showGridView,
@@ -16,9 +17,8 @@ const BottomNav = ({
 	showCreatePlaylistModal,
 }) => {
 	return (
-		<div
-			className="bottom-nav"
-			style={{
+		<Box
+			sx={{
 				display: "flex",
 				flexDirection: "column",
 				position: "sticky",
@@ -62,7 +62,7 @@ const BottomNav = ({
 					</BottomNavigation>
 				</Paper>
 			</Slide>
-		</div>
+		</Box>
 	);
 };
 

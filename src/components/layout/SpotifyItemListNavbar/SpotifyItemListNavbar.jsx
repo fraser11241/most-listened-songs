@@ -1,9 +1,9 @@
 import React from "react";
 import { Tab, Tabs } from "@mui/material";
+import { Box } from "@mui/system";
 
 import { SpotifyItemTypes } from "config/enums";
 
-import "./SpotifyItemListNavbar.scss";
 const SpotifyItemListNavbar = ({ currentItemType, setCurrentItemType }) => {
 	const navbarContent = {
 		[SpotifyItemTypes.ARTIST]: "Artists",
@@ -12,8 +12,15 @@ const SpotifyItemListNavbar = ({ currentItemType, setCurrentItemType }) => {
 	};
 
 	return (
-		<header className="navbar-wrapper">
-			<div className="navbar-button-container">
+		<Box
+			component="header"
+			position="sticky"
+			top={0}
+			zIndex={10}
+			background="transparent"
+			className="navbar-wrapper"
+		>
+			<Box display="flex" justifyContent="center" backgroundColor="white">
 				<Tabs
 					value={currentItemType}
 					variant="scrollable"
@@ -32,8 +39,8 @@ const SpotifyItemListNavbar = ({ currentItemType, setCurrentItemType }) => {
 						)
 					)}
 				</Tabs>
-			</div>
-		</header>
+			</Box>
+		</Box>
 	);
 };
 
