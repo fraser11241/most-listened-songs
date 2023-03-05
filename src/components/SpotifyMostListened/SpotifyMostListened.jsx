@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 
 import { SpotifyItemTypes, TimeRanges, MessageState } from "../../config/enums";
 import {
@@ -21,6 +21,7 @@ import MessageModal from "../MessageModal/MessageModal";
 import SpotifyItemListNavbar from "../SpotifyItemListNavbar/SpotifyItemListNavbar";
 import { Snackbar } from "@mui/material";
 import Button from "@restart/ui/esm/Button";
+import ErrorToast from "../ErrorToast/ErrorToast";
 
 const SpotifyMostListened = () => {
 	const [recentTracks, setRecentTracks] = useState([]);
@@ -31,9 +32,17 @@ const SpotifyMostListened = () => {
 	const [currentTimeRange, setCurrentTimeRange] = useState(
 		TimeRanges.LONG_TERM
 	);
+	const [errorState, setErrorState] = useState({
+		showError: false,
+		errorMessage: "",
+	});
+	const [modalError, setModalError] = useState({
+		showError: false,
+		errorMessage: "",
+	});
 	const [isErrorFetching, setIsErrorFetching] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
-	const [errorMessage, setErrorMessage] = useState("");
+
 	const [isCreatePlaylistModalOpen, setIsCreatePlaylistModalOpen] =
 		useState(false);
 	const [message, setMessage] = useState({});
@@ -77,18 +86,33 @@ const SpotifyMostListened = () => {
 		}, []);
 	};
 
-	const handleFetchingError = (e) => {
+	const handleFetchingError = useCallback((e) => {
 		console.error("Error occurred while fetching", e);
-		setIsErrorFetching(true);
+		const errorMessage =
+			e.message === "Token expired"
+				? "Token has expired"
+				: "Error occurred whilst fetching spotify data";
 
-		if (e.message === "Token expired") {
-			setErrorMessage("Token has expired");
-		} else {
-			setErrorMessage("Error occurred whilst fetching");
-		}
+		setIsErrorFetching(true);
+		showError(errorMessage);
+	}, []);
+
+	const showError = (message) => {
+		setErrorState({ showError: true, message });
+	};
+	const clearError = () => {
+		setErrorState({ showError: false });
 	};
 
-	const displayMessage = (
+	const showErrorInModal = (message) => {
+		setModalError({ showError: true, message });
+	};
+
+	const clearErrorInModal = () => {
+		setModalError({ showError: false });
+	};
+
+	const showMessageModal = (
 		message,
 		state = MessageState.SUCCESS,
 		modalProps
@@ -100,7 +124,7 @@ const SpotifyMostListened = () => {
 		});
 	};
 
-	const hideMessage = () => {
+	const hideMessageModal = () => {
 		setMessage({});
 	};
 
@@ -121,12 +145,13 @@ const SpotifyMostListened = () => {
 
 					setIsLoading(false);
 					setIsErrorFetching(false);
+					clearError();
 				} catch (e) {
 					handleFetchingError(e);
 				}
 			})();
 		}
-	}, [token, currentTimeRange]);
+	}, [token, currentTimeRange, handleFetchingError]);
 
 	const showItemList =
 		!isErrorFetching && recentTracks && recentTracks.length;
@@ -166,17 +191,16 @@ const SpotifyMostListened = () => {
 						/>
 					)}
 
-					{/* {showError && (
-				<div className="column is-10 has-background">
-					{errorMessage || "Error fetching content"}
-				</div>
-			)}
-			*/}
-
 					<MessageModal
-						handleCloseModal={hideMessage}
+						handleCloseModal={hideMessageModal}
 						message={message}
 						isOpen={showMessage}
+					/>
+
+					<ErrorToast
+						message={errorState.message}
+						open={errorState.showError}
+						handleClose={clearError}
 					/>
 
 					{isCreatePlaylistModalOpen && (
@@ -187,10 +211,20 @@ const SpotifyMostListened = () => {
 								setIsCreatePlaylistModalOpen(false)
 							}
 							items={getCurrentSpotifyItemsWithoutDuplicates()}
-							showMessage={displayMessage}
-							isOpen={isCreatePlaylistModalOpen}
+							showCreatedPlaylistModal={showMessageModal}
+							isOpen={true}
 							itemType={currentItemType}
-						/>
+							showErrorMessage={showErrorInModal}
+						>
+							{
+								<ErrorToast
+									message={modalError.message}
+									open={modalError.showError}
+									handleClose={clearErrorInModal}
+									autoHideDuration={6000}
+								/>
+							}
+						</CreatePlaylistModal>
 					)}
 				</main>
 			</div>

@@ -82,7 +82,7 @@ export const getGroupedTopSongsFromArtists = async (
 			return await getTopTracksFromArtist(token, id, songsFromEachArtist);
 		})
 	);
-	console.log(songsFromEachArtist, topTracksForEachArtist);
+
 	const groupedTopSongs = {};
 	topTracksForEachArtist.forEach((topTracksForArtist, index) => {
 		const artistId = artistIds[index];

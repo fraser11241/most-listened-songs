@@ -31,13 +31,12 @@ const CreatePlaylistModal = ({
 	isOpen,
 	handleCloseModal,
 	items,
-	showMessage,
+	showCreatedPlaylistModal,
 	itemType,
+	showErrorMessage,
 	children,
 }) => {
 	const [itemsInPlaylist, setItemsInPlaylist] = useState();
-	const [playlistName, setPlaylistName] = useState("Playlist Name");
-	const [playlistDescription, setPlaylistDescription] = useState("");
 	const [numSongsFromArtist, setNumSongsFromArtist] = useState(5);
 	const [numArtists, setNumArtists] = useState(5);
 	const [groupedTopSongsFromArtists, setGroupedTopSongsFromArtist] = useState(
@@ -45,6 +44,16 @@ const CreatePlaylistModal = ({
 	);
 	const DEFAULT_PLAYLIST_NAME = "Spotify Playlist";
 	const MAX_TOP_SONGS_FOR_ARTIST = 10;
+
+	const handleCreatingPlaylistError = (e) => {
+		console.error("Error occurred while creating playlist", e);
+
+		const errorMessageToDisplay =
+			e.message === "Token expired"
+				? "Token has expired"
+				: "Error occurred while creating playlist";
+		showErrorMessage(errorMessageToDisplay);
+	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -76,13 +85,14 @@ const CreatePlaylistModal = ({
 				playlistDescription || "",
 				spotifyItemsToIncludeInPlaylist
 			);
+
 			if (playlistId) {
 				const createdPlaylistUri = `spotify:playlist:${playlistId}`;
 				const createdPlaylistImage = await getPlaylistImage(
 					token,
 					playlistId
 				);
-				showMessage(
+				showCreatedPlaylistModal(
 					"Playlist created sucessfully",
 					MessageState.SUCCESS,
 					{
@@ -95,27 +105,11 @@ const CreatePlaylistModal = ({
 			} else {
 				throw new Error("No playlist created");
 			}
-		} catch (e) {
-			console.error(e);
-			showMessage("Error creating playlist", MessageState.ERROR);
-		}
-		handleCloseModal();
-	};
 
-	const toggleIsIncludedInPlaylist = (index) => {
-		setItemsInPlaylist(
-			itemsInPlaylist.map((item, itemIndex) => {
-				if (itemIndex !== index) {
-					return {
-						...item,
-					};
-				}
-				return {
-					...item,
-					isIncludedInPlaylist: !item.isIncludedInPlaylist,
-				};
-			})
-		);
+			handleCloseModal();
+		} catch (e) {
+			handleCreatingPlaylistError(e);
+		}
 	};
 
 	useEffect(() => {
@@ -167,7 +161,6 @@ const CreatePlaylistModal = ({
 
 	return (
 		<Dialog
-			con
 			open={isOpen}
 			onClose={handleCloseModal}
 			aria-labelledby="dialog-title"
@@ -215,6 +208,8 @@ const CreatePlaylistModal = ({
 				</Button>
 				<Button type="submit">Create Playlist</Button>
 			</DialogActions>
+
+			{children}
 		</Dialog>
 	);
 };
