@@ -1,5 +1,5 @@
-import { getEndpoint } from "./fetch";
-import { TimeRanges } from "../config/enums";
+import { getEndpoint } from "requests/fetch";
+import { TimeRanges } from "config/enums";
 
 const timeRangeQueries = {
 	[TimeRanges.SHORT_TERM]: "short_term",

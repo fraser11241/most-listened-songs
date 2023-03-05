@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@mui/material";
 
-import { TimeRanges } from "../../config/enums";
+import { TimeRanges } from "config/enums";
 
 const TimeRangeSelector = ({ timeRange, setTimeRange }) => {
 	const timeRangeText = {

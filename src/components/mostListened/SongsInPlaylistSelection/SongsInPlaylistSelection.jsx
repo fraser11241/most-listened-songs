@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Slider, Switch, Typography } from "@mui/material";
-import SpotifyItem from "../SpotifyItem/SpotifyItem";
+import SpotifyItem from "components/mostListened/SpotifyItem/SpotifyItem";
 
 import "./SongsInPlaylistSelection.scss";
 import { Box } from "@mui/system";

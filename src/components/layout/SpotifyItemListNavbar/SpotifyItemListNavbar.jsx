@@ -1,9 +1,9 @@
-import { Tab, Tabs } from "@mui/material";
 import React from "react";
-import { SpotifyItemTypes } from "../../config/enums";
+import { Tab, Tabs } from "@mui/material";
+
+import { SpotifyItemTypes } from "config/enums";
 
 import "./SpotifyItemListNavbar.scss";
-
 const SpotifyItemListNavbar = ({ currentItemType, setCurrentItemType }) => {
 	const navbarContent = {
 		[SpotifyItemTypes.ARTIST]: "Artists",

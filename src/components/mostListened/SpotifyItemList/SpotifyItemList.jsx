@@ -1,11 +1,10 @@
 import React from "react";
-import { ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
-import SpotifyItem from "../SpotifyItem/SpotifyItem";
-import SpotifyItemSkeletonLoading from "../SpotifyItemSkeletonLoading/SpotifyItemSkeletonLoading";
-import BottomNav from "../BottomNav/BottomNav";
+
+import SpotifyItemGridView from "components/mostListened/SpotifyItemGridView/SpotifyItemGridView";
+import SpotifyItemListView from "components/mostListened/SpotifyItemListView/SpotifyItemListView";
+import BottomNav from "components/layout/BottomNav/BottomNav";
+
 import "./SpotifyItemList.scss";
-import SpotifyItemGridView from "../SpotifyItemGridView/SpotifyItemGridView";
-import SpotifyItemListView from "../SpotifyItemListView/SpotifyItemListView";
 
 const SpotifyItemList = ({
 	items,

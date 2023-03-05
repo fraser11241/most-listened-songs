@@ -1,23 +1,16 @@
+import React from "react";
 import {
 	Button,
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
-	TextField,
 	Typography,
 } from "@mui/material";
-import React from "react";
-import { MessageState } from "../../config/enums";
+
+import { MessageState } from "config/enums";
 
 import "./MessageModal.scss";
-
-const PlaylistImage = ({ playlistImage, playlistLink }) => (
-	<a href={playlistLink}>
-		<img style={{ width: "100%" }} src={playlistImage} />
-	</a>
-);
 
 const MessageModal = ({ handleCloseModal, message, isOpen }) => {
 	const {
@@ -40,10 +33,13 @@ const MessageModal = ({ handleCloseModal, message, isOpen }) => {
 				<section>
 					<Typography>
 						{state === MessageState.SUCCESS && (
-							<PlaylistImage
-								playlistImage={playlistImage}
-								playlistLink={playlistLink}
-							/>
+							<a href={playlistLink}>
+								<img
+									style={{ width: "100%" }}
+									src={playlistImage}
+									alt="Created playlist"
+								/>
+							</a>
 						)}
 					</Typography>
 				</section>

@@ -1,27 +1,21 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 
-import { SpotifyItemTypes, TimeRanges, MessageState } from "../../config/enums";
 import {
 	fetchUserInfo,
 	fetchUserRecentTracks,
 	fetchUserTopArtists,
 	fetchUserTopTracks,
-} from "../../requests/userInfo";
-import {
-	getGroupedTopSongsFromArtists,
-	getTopSongsFromArtists,
-} from "../../requests/playlist";
-import "./SpotifyMostListened.scss";
+} from "requests/userInfo";
+import { SpotifyItemTypes, TimeRanges, MessageState } from "config/enums";
+import loginContext from "components/login/LoginHandler/LoginContext";
+import SpotifyItemListPanel from "components/mostListened/SpotifyItemListPanel/SpotifyItemListPanel";
+import PageWrapper from "components/layout/PageWrapper/PageWrapper";
+import CreatePlaylistModal from "components/layout/CreatePlaylistModal/CreatePlaylistModal";
+import MessageModal from "components/layout/MessageModal/MessageModal";
+import SpotifyItemListNavbar from "components/layout/SpotifyItemListNavbar/SpotifyItemListNavbar";
+import ErrorToast from "components/common/ErrorToast/ErrorToast";
 
-import loginContext from "../LoginHandler/LoginContext";
-import SpotifyItemListPanel from "../SpotifyItemListPanel/SpotifyItemListPanel";
-import PageWrapper from "../PageWrapper/PageWrapper";
-import CreatePlaylistModal from "../CreatePlaylistModal/CreatePlaylistModal";
-import MessageModal from "../MessageModal/MessageModal";
-import SpotifyItemListNavbar from "../SpotifyItemListNavbar/SpotifyItemListNavbar";
-import { Snackbar } from "@mui/material";
-import Button from "@restart/ui/esm/Button";
-import ErrorToast from "../ErrorToast/ErrorToast";
+import "./SpotifyMostListened.scss";
 
 const SpotifyMostListened = () => {
 	const [recentTracks, setRecentTracks] = useState([]);

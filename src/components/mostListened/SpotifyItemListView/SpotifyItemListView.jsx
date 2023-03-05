@@ -1,6 +1,7 @@
 import React from "react";
-import SpotifyItem from "../SpotifyItem/SpotifyItem";
-import SpotifyItemSkeletonLoading from "../SpotifyItemSkeletonLoading/SpotifyItemSkeletonLoading";
+
+import SpotifyItem from "components/mostListened/SpotifyItem/SpotifyItem";
+import SpotifyItemSkeletonLoading from "components/mostListened/SpotifyItemSkeletonLoading/SpotifyItemSkeletonLoading";
 
 const SkeletonLoadingItems = () =>
 	[...Array(10)].map((_, index) => (

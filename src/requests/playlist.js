@@ -1,5 +1,5 @@
-import { getEndpoint, postDataToEndpoint } from "./fetch";
-import { getUserTopTrackValues } from "./userInfo";
+import { getEndpoint, postDataToEndpoint } from "requests/fetch";
+import { getUserTopTrackValues } from "requests/userInfo";
 
 export const createEmptyPlaylist = async (
 	token,

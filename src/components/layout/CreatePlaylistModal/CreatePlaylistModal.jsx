@@ -1,15 +1,4 @@
 import React, { useState, useEffect } from "react";
-
-import SongsInPlaylistSelection from "../SongsInPlaylistSelection/SongsInPlaylistSelection";
-import {
-	createPlaylistFromSpotifyItems,
-	getGroupedTopSongsFromArtists,
-	getPlaylistImage,
-} from "../../requests/playlist";
-import { createMessageObject } from "../SpotifyMostListened/SpotifyMostListened";
-import { MessageState, SpotifyItemTypes } from "../../config/enums";
-
-import "./CreatePlaylistModal.scss";
 import {
 	Dialog,
 	DialogActions,
@@ -18,13 +7,19 @@ import {
 	DialogTitle,
 	Button,
 	TextField,
-	Paper,
 } from "@mui/material";
-import { Box } from "@mui/system";
-import SpotifyItemList from "../SpotifyItemList/SpotifyItemList";
-import TopArtistSongSlider from "../TopArtistSongSliders/TopArtistSongSlider";
 
-// TODO Add slider for number of items from each artist for artist creating playlist
+import SongsInPlaylistSelection from "components/mostListened/SongsInPlaylistSelection/SongsInPlaylistSelection";
+import {
+	createPlaylistFromSpotifyItems,
+	getGroupedTopSongsFromArtists,
+	getPlaylistImage,
+} from "requests/playlist";
+import { MessageState, SpotifyItemTypes } from "config/enums";
+import TopArtistSongSlider from "components/forms/TopArtistSongSliders/TopArtistSongSlider";
+
+import "./CreatePlaylistModal.scss";
+
 const CreatePlaylistModal = ({
 	token,
 	userId,

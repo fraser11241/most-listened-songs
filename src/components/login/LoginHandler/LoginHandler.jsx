@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import LoginPage from "../LoginPage/LoginPage";
-import LoginLogoutButton from "../LoginLogoutButton/LoginLogoutButton";
-import loginContext from "./LoginContext";
-import TokenExpiredPage from "../TokenExpiredPage/TokenExpiredPage";
+import LoginPage from "components/pages/LoginPage/LoginPage";
+import LoginLogoutButton from "components/login/LoginLogoutButton/LoginLogoutButton";
+import loginContext from "components/login/LoginHandler/LoginContext";
 
 const LoginHandler = ({ children }) => {
 	const [token, setToken] = useState("");
