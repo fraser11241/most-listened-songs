@@ -22,6 +22,7 @@ const SpotifyItemListNavbar = ({ currentItemType, setCurrentItemType }) => {
 					{Object.entries(navbarContent).map(
 						([value, text], index) => (
 							<Tab
+								component="button"
 								key={index}
 								tabIndex={0}
 								onClick={() => setCurrentItemType(+value)}
