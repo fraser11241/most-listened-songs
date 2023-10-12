@@ -4,7 +4,6 @@ import { Box } from "@mui/system";
 
 const getContentForItem = (item) => {
 	const showSubtitle = !!item.artists;
-
 	return {
 		imageUrl: item.image.url,
 		title: item.name,
@@ -44,22 +43,20 @@ const SpotifyItem = ({ item, children, styles: stylesProp }) => {
 	const { title, subtitle, imageUrl } = getContentForItem(item);
 
 	return (
-		<a>
-			<Box sx={{ ...styles.itemContainer, ...(stylesProp || {}) }}>
-				<img src={imageUrl} alt={title} loading="lazy" />
-				<Box sx={styles.textContainer}>
-					<Typography component={"span"} variant="body1" noWrap>
-						{title}
+		<Box sx={{ ...styles.itemContainer, ...(stylesProp || {}) }}>
+			<img src={imageUrl} alt={title} loading="lazy" />
+			<Box sx={styles.textContainer}>
+				<Typography component={"span"} variant="body1" noWrap>
+					{title}
+				</Typography>
+				{subtitle && (
+					<Typography variant="body2" color="#424242" noWrap>
+						{subtitle}
 					</Typography>
-					{subtitle && (
-						<Typography variant="body2" color="#424242" noWrap>
-							{subtitle}
-						</Typography>
-					)}
-				</Box>
-				{children}
+				)}
 			</Box>
-		</a>
+			{children}
+		</Box>
 	);
 };
 
