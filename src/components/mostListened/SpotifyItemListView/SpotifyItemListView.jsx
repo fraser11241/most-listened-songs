@@ -1,4 +1,5 @@
 import React from "react";
+import { List, ListItem } from "@mui/material";
 
 import SpotifyItem from "components/mostListened/SpotifyItem/SpotifyItem";
 import SpotifyItemSkeletonLoading from "components/mostListened/SpotifyItemSkeletonLoading/SpotifyItemSkeletonLoading";
@@ -12,18 +13,22 @@ const SkeletonLoadingItems = () =>
 
 const SpotifyItemListView = ({ items, isLoading }) => {
 	return (
-		<ol className="spotify-item-list">
+		<List>
 			{isLoading && <SkeletonLoadingItems />}
 
 			{!isLoading &&
 				items.map((item) => {
 					return (
-						<li key={item.id}>
+						<ListItem
+							key={item.id}
+							disablePadding
+							sx={{ margin: "10px 0" }}
+						>
 							<SpotifyItem item={item} />
-						</li>
+						</ListItem>
 					);
 				})}
-		</ol>
+		</List>
 	);
 };
 

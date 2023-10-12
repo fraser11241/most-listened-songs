@@ -17,7 +17,6 @@ const SpotifyItemListNavbar = ({ currentItemType, setCurrentItemType }) => {
 			position="sticky"
 			top={0}
 			zIndex={10}
-			background="transparent"
 			className="navbar-wrapper"
 		>
 			<Box display="flex" justifyContent="center" backgroundColor="white">

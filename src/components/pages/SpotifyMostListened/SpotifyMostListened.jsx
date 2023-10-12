@@ -15,8 +15,6 @@ import MessageModal from "components/layout/MessageModal/MessageModal";
 import SpotifyItemListNavbar from "components/layout/SpotifyItemListNavbar/SpotifyItemListNavbar";
 import ErrorToast from "components/common/ErrorToast/ErrorToast";
 
-import "./SpotifyMostListened.scss";
-
 const SpotifyMostListened = () => {
 	const [recentTracks, setRecentTracks] = useState([]);
 	const [topArtists, setTopArtists] = useState([]);

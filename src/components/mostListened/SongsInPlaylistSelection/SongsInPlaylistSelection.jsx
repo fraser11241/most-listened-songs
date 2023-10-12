@@ -9,9 +9,8 @@ const styles = {
 		boxShadow: "0 0 5px rgb(216, 216, 216)",
 	},
 	notIncluded: {
-		"& img": {
-			opacity: 0.7,
-		},
+		background: "#e5e5e5",
+		boxShadow: "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
 	},
 };
 

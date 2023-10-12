@@ -11,8 +11,6 @@ import EmptyIndicator from "components/common/EmptyIndicator/EmptyIndicator";
 import TimeRangeSelector from "components/forms/TimeRangeSelector/TimeRangeSelector";
 import SpotifyItemList from "components/mostListened/SpotifyItemList/SpotifyItemList";
 
-import "./SpotifyItemListPanel.scss";
-
 const SpotifyItemListPanel = ({
 	items,
 	title,
@@ -28,7 +26,7 @@ const SpotifyItemListPanel = ({
 	const isEmpty = !isError && !items.length && !isLoading;
 
 	return (
-		<Container maxWidth="md" sx={{ height: 1 }}>
+		<Container sx={{ height: 1, boxShadow: 1 }}>
 			<div
 				className="spotify-item-list-panel"
 				style={{

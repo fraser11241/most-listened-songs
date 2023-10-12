@@ -2,7 +2,6 @@ import React from "react";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
-// TODO move into utils
 const getContentForItem = (item) => {
 	const showSubtitle = !!item.artists;
 
@@ -46,26 +45,24 @@ const SpotifyItem = ({ item, children, styles: stylesProp }) => {
 	const { title, subtitle, imageUrl } = getContentForItem(item);
 
 	return (
-		<Box sx={{ ...styles.itemContainer, ...(stylesProp || {}) }}>
-			<img
-				src={imageUrl}
-				alt={title}
-				loading="lazy"
-			/>
-			<Box sx={styles.textContainer}>
-				<Typography component={"span"} variant="body1" noWrap>
-					{title}
-				</Typography>
-				{subtitle && (
-					<Typography variant="body2" color="#424242" noWrap>
-						{subtitle}
+		<a>
+			<Box sx={{ ...styles.itemContainer, ...(stylesProp || {}) }}>
+				<img src={imageUrl} alt={title} loading="lazy" />
+				<Box sx={styles.textContainer}>
+					<Typography component={"span"} variant="body1" noWrap>
+						{title}
 					</Typography>
-				)}
+					{subtitle && (
+						<Typography variant="body2" color="#424242" noWrap>
+							{subtitle}
+						</Typography>
+					)}
+				</Box>
+				{children}
 			</Box>
-			{children}
-		</Box>
+		</a>
 	);
 };
 
-export {styles}
+export { styles };
 export default SpotifyItem;

@@ -1,14 +1,12 @@
 import React from "react";
+import { Box } from "@mui/system";
 
 import SpotifyItemGridView from "components/mostListened/SpotifyItemGridView/SpotifyItemGridView";
 import SpotifyItemListView from "components/mostListened/SpotifyItemListView/SpotifyItemListView";
 import BottomNav from "components/layout/BottomNav/BottomNav";
 
-import "./SpotifyItemList.scss";
-
 const SpotifyItemList = ({
 	items,
-	createPlaylist,
 	isLoading,
 	showImageCaption,
 	showAsGrid,
@@ -16,7 +14,15 @@ const SpotifyItemList = ({
 	showCreatePlaylistModal,
 }) => {
 	return (
-		<div className="item-list-wrapper">
+		<Box
+			sx={{
+				height: "100%",
+				flexDirection: "column",
+				display: "flex",
+				justifyContent: "space-between",
+				flexGrow: "1",
+			}}
+		>
 			{showAsGrid ? (
 				<SpotifyItemGridView
 					items={items}
@@ -24,7 +30,7 @@ const SpotifyItemList = ({
 					isLoading={isLoading}
 				/>
 			) : (
-					<SpotifyItemListView items={items} isLoading={isLoading} />
+				<SpotifyItemListView items={items} isLoading={isLoading} />
 			)}
 
 			{!isLoading && (
@@ -34,7 +40,7 @@ const SpotifyItemList = ({
 					showCreatePlaylistModal={showCreatePlaylistModal}
 				/>
 			)}
-		</div>
+		</Box>
 	);
 };
 
