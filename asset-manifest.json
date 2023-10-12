@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/spotify-most-listened/static/css/main.c8219440.css",
-    "main.js": "/spotify-most-listened/static/js/main.289bdbc2.js",
-    "static/js/787.7bb92562.chunk.js": "/spotify-most-listened/static/js/787.7bb92562.chunk.js",
-    "index.html": "/spotify-most-listened/index.html",
-    "main.c8219440.css.map": "/spotify-most-listened/static/css/main.c8219440.css.map",
-    "main.289bdbc2.js.map": "/spotify-most-listened/static/js/main.289bdbc2.js.map",
-    "787.7bb92562.chunk.js.map": "/spotify-most-listened/static/js/787.7bb92562.chunk.js.map"
+    "main.css": "/most-listened-songs/static/css/main.c8219440.css",
+    "main.js": "/most-listened-songs/static/js/main.de419123.js",
+    "static/js/787.7bb92562.chunk.js": "/most-listened-songs/static/js/787.7bb92562.chunk.js",
+    "index.html": "/most-listened-songs/index.html",
+    "main.c8219440.css.map": "/most-listened-songs/static/css/main.c8219440.css.map",
+    "main.de419123.js.map": "/most-listened-songs/static/js/main.de419123.js.map",
+    "787.7bb92562.chunk.js.map": "/most-listened-songs/static/js/787.7bb92562.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c8219440.css",
-    "static/js/main.289bdbc2.js"
+    "static/js/main.de419123.js"
   ]
 }
