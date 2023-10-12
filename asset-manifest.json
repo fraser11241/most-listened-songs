@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/most-listened-songs/static/css/main.c8219440.css",
-    "main.js": "/most-listened-songs/static/js/main.de419123.js",
+    "main.js": "/most-listened-songs/static/js/main.1295a57e.js",
     "static/js/787.7bb92562.chunk.js": "/most-listened-songs/static/js/787.7bb92562.chunk.js",
     "index.html": "/most-listened-songs/index.html",
     "main.c8219440.css.map": "/most-listened-songs/static/css/main.c8219440.css.map",
-    "main.de419123.js.map": "/most-listened-songs/static/js/main.de419123.js.map",
+    "main.1295a57e.js.map": "/most-listened-songs/static/js/main.1295a57e.js.map",
     "787.7bb92562.chunk.js.map": "/most-listened-songs/static/js/787.7bb92562.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c8219440.css",
-    "static/js/main.de419123.js"
+    "static/js/main.1295a57e.js"
   ]
 }
