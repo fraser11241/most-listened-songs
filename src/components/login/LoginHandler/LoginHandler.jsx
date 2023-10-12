@@ -10,8 +10,8 @@ const LoginHandler = ({ children }) => {
 	const CLIENT_ID = "9140a43db1f0411aa6a5255f3e333b18";
 	const REDIRECT_URI =
 		window.location.href && window.location.href.includes("localhost")
-			? "http://localhost:3000/spotify-most-listened"
-			: "https://fraser11241.github.io/spotify-most-listened/";
+			? "http://localhost:3000/most-listened-songs"
+			: "https://fraser11241.github.io/most-listened-songs/";
 	const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 	const RESPONSE_TYPE = "token";
 	const SCOPE =
