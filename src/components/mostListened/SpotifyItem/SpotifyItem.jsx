@@ -28,7 +28,6 @@ const styles = {
 			marginRight: "10px",
 			width: "auto",
 			alignSelf: "center",
-			borderRadius: "6px",
 			boxShadow: "inset 0 0 0 1px hsla(0, 0%, 0%, 0.1)",
 		},
 	},
