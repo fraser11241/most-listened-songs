@@ -15,7 +15,7 @@ const LoginHandler = ({ children }) => {
 	const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 	const RESPONSE_TYPE = "token";
 	const SCOPE =
-		"user-top-read user-read-recently-played playlist-modify-public playlist-modify-private";
+		"user-top-read user-read-recently-played playlist-modify-public";
 	const loginUrl = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
 
 	const checkTokenExpired = (existingTokenExpiry) =>
