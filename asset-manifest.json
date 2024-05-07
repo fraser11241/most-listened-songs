@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/most-listened-songs/static/css/main.b44f4336.css",
-    "main.js": "/most-listened-songs/static/js/main.df0d5a58.js",
+    "main.css": "/most-listened-songs/static/css/main.e2a63929.css",
+    "main.js": "/most-listened-songs/static/js/main.46fba432.js",
     "static/js/787.7bb92562.chunk.js": "/most-listened-songs/static/js/787.7bb92562.chunk.js",
     "index.html": "/most-listened-songs/index.html",
-    "main.b44f4336.css.map": "/most-listened-songs/static/css/main.b44f4336.css.map",
-    "main.df0d5a58.js.map": "/most-listened-songs/static/js/main.df0d5a58.js.map",
+    "main.e2a63929.css.map": "/most-listened-songs/static/css/main.e2a63929.css.map",
+    "main.46fba432.js.map": "/most-listened-songs/static/js/main.46fba432.js.map",
     "787.7bb92562.chunk.js.map": "/most-listened-songs/static/js/787.7bb92562.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b44f4336.css",
-    "static/js/main.df0d5a58.js"
+    "static/css/main.e2a63929.css",
+    "static/js/main.46fba432.js"
   ]
 }
