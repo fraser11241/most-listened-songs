@@ -8,11 +8,12 @@ export const getContentForItem = (item) => {
     ...(showSubtitle && {
       subtitle: item.artists.map((artist) => artist.name).join(", "),
     }),
+    uri: item.uri,
   };
 };
 
 const SpotifyItem = ({ item, children, isStyledAsDisabled }) => {
-  const { title, subtitle, imageUrl } = getContentForItem(item);
+  const { title, subtitle, imageUrl, uri } = getContentForItem(item);
 
   return (
     <div
@@ -20,11 +21,9 @@ const SpotifyItem = ({ item, children, isStyledAsDisabled }) => {
         isStyledAsDisabled ? "bg-base-300" : ""
       }`}
     >
-      <img
-        className="aspect-square h-20 object-cover m-0"
-        src={imageUrl}
-        alt={title}
-      />
+      <a href={uri} className="aspect-square h-20 object-cover m-0">
+        <img className="m-0" src={imageUrl} alt={title} />
+      </a>
       <div className="ml-2 overflow-auto w-full">
         <h2 className="m-0 text-nowrap overflow-ellipsis overflow-hidden w-full">
           {title}
