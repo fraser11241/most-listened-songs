@@ -25,8 +25,8 @@ const TopArtistSongSlider = ({
         }}
       />
       <div className="w-full flex justify-between text-xs px-2">
-        {[...Array(10).keys()].map((_) => (
-          <span>|</span>
+        {[...Array(10).keys()].map((_, index) => (
+          <span key={`${numArtists} - ${numSongsFromArtist} ${index}`}>|</span>
         ))}
       </div>
       <p className="font-bold mb-1">

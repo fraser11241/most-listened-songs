@@ -74,9 +74,9 @@ const SongsInPlaylistSelection = ({ itemsInPlaylist }) => {
                   item={item}
                   isStyledAsDisabled={!isIncludedInPlaylist[index]}
                 >
-                  <div class="form-control w-40 ml-auto">
-                    <label class="cursor-pointer label">
-                      <span class="label-text">Include in playlist?</span>
+                  <div className="form-control w-40 ml-auto">
+                    <label className="cursor-pointer label">
+                      <span className="label-text">Include in playlist?</span>
                       <input
                         type="checkbox"
                         name="playlistSong"

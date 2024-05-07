@@ -20,7 +20,7 @@ const SpotifyItemListPanel = ({
   const isEmpty = !isError && !items.length && !isLoading;
 
   return (
-    <div className="rounded-md mt-3 p-2 shadow-sm pb-0 ">
+    <div className="rounded-md mt-3 p-2 shadow-sm pb-0 h-full">
       <div className="flex h-full flex-col">
         <div className="flex justify-between items-center flex-wrap">
           <div
@@ -42,9 +42,9 @@ const SpotifyItemListPanel = ({
           </div>
 
           {showAsGrid && (
-            <div class="form-control w-32">
-              <label class="label cursor-pointer">
-                <span class="label-text">Show Titles</span>
+            <div className="form-control w-32">
+              <label className="label cursor-pointer">
+                <span className="label-text">Show Titles</span>
                 <input
                   value={showImageCaption}
                   onChange={() => setShowImageCaption(!showImageCaption)}

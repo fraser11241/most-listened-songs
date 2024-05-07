@@ -8,11 +8,14 @@ const SpotifyItemGridView = ({ items, showImageCaption }) => {
       <ul
         className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 overflow-y-auto p-0 bg-base-200`}
       >
-        {items.map((item) => {
+        {items.map((item, index) => {
           const { title, subtitle, imageUrl, id } = getContentForItem(item);
 
           return (
-            <li key={id} className="h-auto flex relative flex-col">
+            <li
+              key={`${id} - ${index}`}
+              className="h-auto flex relative flex-col"
+            >
               <img
                 src={imageUrl}
                 alt={title}

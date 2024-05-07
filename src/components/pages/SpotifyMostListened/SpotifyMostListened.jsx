@@ -150,10 +150,10 @@ const SpotifyMostListened = () => {
         handleLogout={handleLogout}
       />
       <div className="h-full w-full">
-        <main className="md:container mx-auto lg:max-w-[1024px]">
+        <main className="md:container mx-auto lg:max-w-[1024px] h-full">
           {showItemList && (
             <SpotifyItemListPanel
-              key={currentItemType}
+              key={`current-${currentItemType} time-${currentTimeRange}`}
               items={getCurrentSpotifyItemsWithoutDuplicates()}
               title={getCurrentSpotifyItemsCategoryText()}
               currentTimeRange={currentTimeRange}

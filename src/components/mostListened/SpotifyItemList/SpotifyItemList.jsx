@@ -12,6 +12,13 @@ const SpotifyItemList = ({
   setShowAsGrid,
   showCreatePlaylistModal,
 }) => {
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center">
+        <span className="loading loading-spinner loading-lg" />
+      </div>
+    );
+  }
   return (
     <div className="w-full">
       {showAsGrid ? (

@@ -199,7 +199,6 @@ const CreatePlaylistModal = ({
               name="playlistDescription"
               margin="dense"
               label="Playlist Description"
-              fullWidth
             >
               <TextSnippetIcon />
               <input
