@@ -8,6 +8,7 @@
 		"@emotion/styled": "^11.10.5",
 		"@mui/icons-material": "^5.11.0",
 		"@mui/material": "^5.11.7",
+		"@tailwindcss/typography": "^0.5.13",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^13.4.0",
 		"@testing-library/user-event": "^13.5.0",
@@ -69,9 +70,11 @@
 		"@storybook/react": "^6.5.12",
 		"@storybook/testing-library": "^0.0.13",
 		"babel-plugin-named-exports-order": "^0.0.2",
+		"daisyui": "^4.10.5",
 		"gh-pages": "^4.0.0",
 		"prettier": "^2.8.3",
 		"prop-types": "^15.8.1",
+		"tailwindcss": "^3.4.3",
 		"webpack": "^5.74.0"
 	}
 }

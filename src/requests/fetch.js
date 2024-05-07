@@ -1,6 +1,13 @@
 export const genericErrorHandler = (response) => {
 	if (!response.ok) {
-		const errorMessage = response.status === 401 ? "Token expired" : null;
+		let errorMessage = null;
+		
+		if(response.status === 401) {
+			errorMessage = "Token expired" 
+		}
+		else if (response.status === 429) {
+			errorMessage = "API rate limit exceeded. Too many requests made to Spotify API"
+		}
 		throw Error(
 			errorMessage ||
 				response.statusText ||

@@ -1,40 +1,29 @@
 import React from "react";
-import { Button } from "@mui/material";
 
 import { TimeRanges } from "config/enums";
-import { Box } from "@mui/system";
 
 const TimeRangeSelector = ({ timeRange, setTimeRange }) => {
-	const timeRangeText = {
-		[TimeRanges.LONG_TERM]: "All Time",
-		[TimeRanges.MEDIUM_TERM]: "6 months",
-		[TimeRanges.SHORT_TERM]: "Recent",
-	};
+  const timeRangeText = {
+    [TimeRanges.LONG_TERM]: "All Time",
+    [TimeRanges.MEDIUM_TERM]: "6 months",
+    [TimeRanges.SHORT_TERM]: "Recent",
+  };
 
-	return (
-		<Box display="flex" flexWrap="wrap">
-			{Object.entries(timeRangeText).map(([value, text], index) => (
-				<Button
-					key={index}
-					className={+value === +timeRange ? "active" : ""}
-					sx={{
-						color: "gray",
-						"&.active": {
-							color: "black",
-						},
-						paddingLeft: 0,
-					}}
-					disableRipple
-					variant="text"
-					onClick={() => {
-						setTimeRange(value);
-					}}
-				>
-					{text}
-				</Button>
-			))}
-		</Box>
-	);
+  return (
+    <div className="flex flex-wrap gap-2">
+      {Object.entries(timeRangeText).map(([value, text], index) => (
+        <button
+          key={index}
+          className={`${+value === +timeRange ? "font-bold" : ""}`}
+          onClick={() => {
+            setTimeRange(value);
+          }}
+        >
+          {text}
+        </button>
+      ))}
+    </div>
+  );
 };
 
 export default TimeRangeSelector;

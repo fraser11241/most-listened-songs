@@ -1,63 +1,41 @@
 import React from "react";
-import {
-	ImageList,
-	ImageListItem,
-	ImageListItemBar,
-	Slide,
-} from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
-// TODO remove as duplicate in SpotifyItem
-const getContentForItem = (item) => {
-	const showSubtitle = !!item.artists;
-	return {
-		id: item.id,
-		imageUrl: item.image.url,
-		title: item.name,
-		previewUrl: item.preview_url,
-		...(showSubtitle && {
-			subtitle: item.artists.map((artist) => artist.name).join(", "),
-		}),
-	};
-};
+import { getContentForItem } from "../SpotifyItem/SpotifyItem";
 
 const SpotifyItemGridView = ({ items, showImageCaption }) => {
-	// const extraSmall = useMediaQuery('max-width:300px');
-	const extraSmall = useMediaQuery("(min-width:600px)");
-	const small = useMediaQuery("(min-width:768px)");
-	const medium = useMediaQuery("(min-width:982px)");
-	const large = useMediaQuery("(min-width:992px)");
+  return (
+    <div>
+      <ul
+        className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 overflow-y-auto p-0 bg-base-200`}
+      >
+        {items.map((item) => {
+          const { title, subtitle, imageUrl, id } = getContentForItem(item);
 
-	const getNumberColumns = () => {
-		if (large) return 5;
-		else if (medium) return 4;
-		else if (small) return 3;
-		else if (extraSmall) return 2;
-		else return 1;
-	};
-
-	return (
-		<div>
-			<ImageList gap={8} cols={getNumberColumns()}>
-				{items.map((item) => {
-					const { title, subtitle, imageUrl, id } =
-						getContentForItem(item);
-
-					return (
-						<ImageListItem key={id}>
-							<img src={imageUrl} alt={title} />
-							<Slide in={showImageCaption} direction="up">
-								<ImageListItemBar
-									title={title}
-									subtitle={<span>{subtitle}</span>}
-								/>
-							</Slide>
-						</ImageListItem>
-					);
-				})}
-			</ImageList>
-		</div>
-	);
+          return (
+            <li key={id} className="h-auto flex relative flex-col">
+              <img
+                src={imageUrl}
+                alt={title}
+                className="object-cover w-full h-auto block grow aspect-square m-0"
+              />
+              {showImageCaption && (
+                <div className="bg-base-100 p-2 rounded-sm">
+                  <p className="p-0 m-0 font-semibold text-lg text-nowrap overflow-hidden overflow-ellipsis">
+                    {title}
+                  </p>
+                  {!!subtitle && (
+                    <p className="p-0 m-0 font-thin text-sm text-nowrap">
+                      {subtitle}
+                    </p>
+                  )}
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 };
 
 export default SpotifyItemGridView;

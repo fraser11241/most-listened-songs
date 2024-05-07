@@ -1,106 +1,102 @@
 import React, { useEffect, useState } from "react";
-import { Button, Switch, List, ListItem } from "@mui/material";
-import { Box } from "@mui/system";
 
 import SpotifyItem from "components/mostListened/SpotifyItem/SpotifyItem";
 
-const styles = {
-	included: {
-		boxShadow: "0 0 5px rgb(216, 216, 216)",
-	},
-	notIncluded: {
-		background: "#e5e5e5",
-		boxShadow: "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-	},
-};
-
 const SongsInPlaylistSelection = ({ itemsInPlaylist }) => {
-	const [isIncludedInPlaylist, setIsIncludedInPlaylist] = useState(
-		itemsInPlaylist?.length ? itemsInPlaylist.map(() => true) : []
-	);
+  const [isIncludedInPlaylist, setIsIncludedInPlaylist] = useState(
+    itemsInPlaylist?.length ? itemsInPlaylist.map(() => true) : []
+  );
 
-	const toggleIsIncludedInPlaylist = (indexToToggle) => {
-		setIsIncludedInPlaylist(
-			isIncludedInPlaylist.map((isIncluded, index) =>
-				index === indexToToggle ? !isIncluded : isIncluded
-			)
-		);
-	};
+  const toggleIsIncludedInPlaylist = (indexToToggle) => {
+    setIsIncludedInPlaylist(
+      isIncludedInPlaylist.map((isIncluded, index) =>
+        index === indexToToggle ? !isIncluded : isIncluded
+      )
+    );
+  };
 
-	const selectAll = () => {
-		setIsIncludedInPlaylist(itemsInPlaylist.map(() => true));
-	};
+  const selectAll = () => {
+    setIsIncludedInPlaylist(itemsInPlaylist.map(() => true));
+  };
 
-	const deselectAll = () => {
-		setIsIncludedInPlaylist(itemsInPlaylist.map(() => false));
-	};
+  const deselectAll = () => {
+    setIsIncludedInPlaylist(itemsInPlaylist.map(() => false));
+  };
 
-	useEffect(() => {
-		setIsIncludedInPlaylist(
-			itemsInPlaylist?.length ? itemsInPlaylist.map(() => true) : []
-		);
-	}, [itemsInPlaylist]);
+  useEffect(() => {
+    setIsIncludedInPlaylist(
+      itemsInPlaylist?.length ? itemsInPlaylist.map(() => true) : []
+    );
+  }, [itemsInPlaylist]);
 
-	return (
-		itemsInPlaylist && (
-			<Box>
-				<Box sx={{ display: "flex", justifyContent: "end" }}>
-					<Button
-						onClick={selectAll}
-						type="button"
-						variant="text"
-						aria-label="Add all songs to selection"
-					>
-						Select all
-					</Button>
-					<Button
-						onClick={deselectAll}
-						type="button"
-						variant="text"
-						aria-label="Remove all songs from selection"
-					>
-						Deselect all
-					</Button>
-				</Box>
+  return (
+    itemsInPlaylist && (
+      <div className="mt-2">
+        <div className="flex">
+          <p>
+            <strong>
+              {
+                itemsInPlaylist.filter(
+                  (_, index) => isIncludedInPlaylist[index]
+                ).length
+              }
+            </strong>{" "}
+            songs in playlist
+          </p>
+          <div className="ml-auto">
+            <button
+              className="btn btn-outline"
+              onClick={selectAll}
+              type="button"
+              aria-label="Add all songs to selection"
+            >
+              Select all
+            </button>
+            <button
+              className="btn btn-outline ml-2"
+              onClick={deselectAll}
+              type="button"
+              aria-label="Remove all songs from selection"
+            >
+              Deselect all
+            </button>
+          </div>
+        </div>
 
-				<List>
-					{itemsInPlaylist.map((item, index) => (
-						<ListItem
-							key={item.id}
-							sx={{ display: "list-item" }}
-							disablePadding
-						>
-							<Box component="label">
-								<SpotifyItem
-									item={item}
-									styles={{
-										cursor: "pointer",
-										...(isIncludedInPlaylist[index]
-											? styles.included
-											: styles.notIncluded),
-									}}
-								>
-									<Switch
-										sx={{ marginLeft: "auto" }}
-										name="playlistSong"
-										checked={
-											isIncludedInPlaylist[index] ?? true
-										}
-										onChange={() =>
-											toggleIsIncludedInPlaylist(index)
-										}
-										inputProps={{
-											"aria-label": item.name,
-										}}
-									/>
-								</SpotifyItem>
-							</Box>
-						</ListItem>
-					))}
-				</List>
-			</Box>
-		)
-	);
+        <ol className="list-none p-0">
+          {itemsInPlaylist.map((item, index) => (
+            <li
+              className="p-0"
+              key={`${item.name} ${index} ${itemsInPlaylist.length}`}
+            >
+              <label>
+                <SpotifyItem
+                  item={item}
+                  isStyledAsDisabled={!isIncludedInPlaylist[index]}
+                >
+                  <div class="form-control w-40 ml-auto">
+                    <label class="cursor-pointer label">
+                      <span class="label-text">Include in playlist?</span>
+                      <input
+                        type="checkbox"
+                        name="playlistSong"
+                        checked={isIncludedInPlaylist[index] || false}
+                        onChange={() => {
+                          toggleIsIncludedInPlaylist(index);
+                        }}
+                        className="toggle toggle-secondary z-50"
+                        aria-label={item.name}
+                      />
+                    </label>
+                  </div>
+                </SpotifyItem>
+              </label>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )
+  );
 };
 
 export default SongsInPlaylistSelection;

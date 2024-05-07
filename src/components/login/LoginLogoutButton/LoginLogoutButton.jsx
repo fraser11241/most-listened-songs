@@ -1,20 +1,13 @@
 import React from "react";
-import { Fab } from "@mui/material";
-
-import "./LoginLogoutButton.scss";
 
 const LoginLogoutButton = ({ isLoggedIn, loginUrl, handleLogout }) => {
 	return isLoggedIn ? (
-		<div className="logout-button-container">
-			<Fab
-				className="logout-button"
-				size="small"
-				variant="extended"
-				color="secondary"
+		<div>
+			<button
 				onClick={handleLogout}
 			>
 				Logout of spotify
-			</Fab>
+			</button>
 		</div>
 	) : (
 		<a

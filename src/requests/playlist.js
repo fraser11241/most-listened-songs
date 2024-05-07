@@ -2,124 +2,129 @@ import { getEndpoint, postDataToEndpoint } from "requests/fetch";
 import { getUserTopTrackValues } from "requests/userInfo";
 
 export const createEmptyPlaylist = async (
-	token,
-	userId,
-	name,
-	description,
-	isPublic = false
+  token,
+  userId,
+  name,
+  description,
+  isPublic = false
 ) => {
-	const path = `users/${userId}/playlists`;
-	const data = {
-		name,
-		description,
-		public: isPublic,
-	};
-	return await postDataToEndpoint(token, path, data);
+  const path = `users/${userId}/playlists`;
+  const data = {
+    name,
+    description,
+    public: isPublic,
+  };
+  return await postDataToEndpoint(token, path, data);
 };
 
 export const addSongsToPlaylist = async (token, playlistId, trackUris) => {
-	const path = `playlists/${playlistId}/tracks`;
+  const path = `playlists/${playlistId}/tracks`;
 
-	const _addSongs = async (uris) => {
-		const data = {
-			uris: uris,
-		};
+  const _addSongs = async (uris) => {
+    const data = {
+      uris: uris,
+    };
 
-		return await postDataToEndpoint(token, path, data);
-	};
+    return await postDataToEndpoint(token, path, data);
+  };
 
-	// Only 100 tracks can be added in 1 request, so if there is more than 100 split into multiple requests
-	let response;
+  // Only 100 tracks can be added in 1 request, so if there is more than 100 split into multiple requests
+  let response;
 
-	if (!trackUris.length) {
-		return null;
-	} else if (trackUris.length <= 100) {
-		response = await _addSongs(trackUris);
-	} else {
-		for (let i = 0; i < Math.ceil(trackUris.length / 100); i++) {
-			const splicePosition = i * 100;
-			const urisToAdd = [...trackUris].slice(
-				splicePosition,
-				splicePosition + 100
-			);
+  if (!trackUris.length) {
+    return null;
+  } else if (trackUris.length <= 100) {
+    response = await _addSongs(trackUris);
+  } else {
+    for (let i = 0; i < Math.ceil(trackUris.length / 100); i++) {
+      const splicePosition = i * 100;
+      const urisToAdd = [...trackUris].slice(
+        splicePosition,
+        splicePosition + 100
+      );
 
-			response = await _addSongs(urisToAdd);
-		}
-	}
+      response = await _addSongs(urisToAdd);
+    }
+  }
 
-	return response;
+  return response;
 };
 
 export const addAllSongsInAlbumToPlaylist = () => {};
 
 export const getTopTracksFromArtist = async (token, artistId, limit = "5") => {
-	return await getEndpoint(token, `artists/${artistId}/top-tracks?market=gb`)
-		.then((result) => result["tracks"].splice(0, limit))
-		.catch((error) => console.log("error", error));
+  return await getEndpoint(token, `artists/${artistId}/top-tracks?market=gb`)
+    .then((result) => result["tracks"].splice(0, limit))
+    .catch((error) => console.log("error", error));
 };
 
 export const getTopSongsFromArtists = async (
-	token,
-	artistIds,
-	songsFromEachArtist = "5"
+  token,
+  artistIds,
+  songsFromEachArtist = "5"
 ) => {
-	const topTracksForEachArtist = await Promise.all(
-		artistIds.map(async (id) => {
-			return await getTopTracksFromArtist(token, id, songsFromEachArtist);
-		})
-	);
-	const topTracks = [].concat(...topTracksForEachArtist);
-	return topTracks.map(getUserTopTrackValues);
+  try {
+    const topTracksForEachArtist = await Promise.all(
+      artistIds.map(async (id) => {
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        return await getTopTracksFromArtist(token, id, songsFromEachArtist);
+      })
+    );
+    const topTracks = [].concat(...topTracksForEachArtist);
+    return topTracks.map(getUserTopTrackValues);
+  } catch (e) {
+    console.log("Error, retrying");
+    await new Promise((resolve) => setTimeout(resolve, 15000));
+    return await getTopSongsFromArtists(token, artistIds, songsFromEachArtist);
+  }
 };
 
 export const getGroupedTopSongsFromArtists = async (
-	token,
-	artistIds,
-	songsFromEachArtist
+  token,
+  artistIds,
+  songsFromEachArtist
 ) => {
-	const topTracksForEachArtist = await Promise.all(
-		artistIds.map(async (id) => {
-			return await getTopTracksFromArtist(token, id, songsFromEachArtist);
-		})
-	);
+  const topTracksForEachArtist = await Promise.all(
+    artistIds.map(async (id) => {
+      return await getTopTracksFromArtist(token, id, songsFromEachArtist);
+    })
+  );
 
-	const groupedTopSongs = {};
-	topTracksForEachArtist.forEach((topTracksForArtist, index) => {
-		const artistId = artistIds[index];
-		groupedTopSongs[artistId] = topTracksForArtist.map(
-			getUserTopTrackValues
-		);
-	});
+  const groupedTopSongs = {};
+  topTracksForEachArtist.forEach((topTracksForArtist, index) => {
+    const artistId = artistIds[index];
+    groupedTopSongs[artistId] = topTracksForArtist.map(getUserTopTrackValues);
+  });
 
-	return groupedTopSongs;
+  return groupedTopSongs;
 };
 
 export const createPlaylistFromSpotifyItems = async (
-	token,
-	userId,
-	playlistName,
-	playlistDescription,
-	spotifyItems,
-	isPublic = true
+  token,
+  userId,
+  playlistName,
+  playlistDescription,
+  spotifyItems,
+  isPublic = true
 ) => {
-	const { id: playlistId } = await createEmptyPlaylist(
-		token,
-		userId,
-		playlistName,
-		playlistDescription,
-		isPublic
-	);
+  const { id: playlistId } = await createEmptyPlaylist(
+    token,
+    userId,
+    playlistName,
+    playlistDescription,
+    isPublic
+  );
 
-	if (!playlistId) {
-		return false;
-	}
+  if (!playlistId) {
+    return false;
+  }
 
-	const uris = spotifyItems.map(({ uri }) => uri);
-	const { snapshot_id } = await addSongsToPlaylist(token, playlistId, uris);
+  const uris = spotifyItems.map(({ uri }) => uri);
+  const { snapshot_id } = await addSongsToPlaylist(token, playlistId, uris);
 
-	return snapshot_id ? playlistId : false;
+  return snapshot_id ? playlistId : false;
 };
 
 export const getPlaylistImage = async (token, playlistId) => {
-	return getEndpoint(token, `playlists/${playlistId}/images`);
+  return getEndpoint(token, `playlists/${playlistId}/images`);
 };
