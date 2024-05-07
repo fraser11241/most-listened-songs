@@ -166,44 +166,56 @@ const CreatePlaylistModal = ({
       aria-describedby="dialog-description"
       className="min-w-[100vw] w-screen h-screen max-h-screen p-4 m-0 bg-base-200"
     >
-      <form className="prose max-w-full" onSubmit={handleSubmit}>
+      <form
+        className="prose max-w-full"
+        onSubmit={handleSubmit}
+        method="dialog"
+      >
         <h2 id="dialog-title">Create Playlist</h2>
         <div className="max-w-full">
           <p className="text-lg">
             Enter a name for the created playlist, and customise its songs
             below.
           </p>
-          <label
-            className={`input input-bordered flex items-center gap-2 max-w-96`}
-            name="playlistName"
-            autoFocus
-            label="Playlist Name"
-            required
-          >
-            <MusicNoteIcon />
-            <input
-              type="text"
-              className="grow"
-              placeholder="Enter playlist name..."
-              defaultValue={DEFAULT_PLAYLIST_NAME}
-              ref={playlistNameInput}
-            />
-          </label>
-          <label
-            className="input input-bordered flex items-center gap-2 max-w-96 mt-2"
-            name="playlistDescription"
-            margin="dense"
-            label="Playlist Description"
-            fullWidth
-          >
-            <TextSnippetIcon />
-            <input
-              type="text"
-              className="grow"
-              placeholder="Enter playlist description..."
-              ref={playlistDescriptionInput}
-            />
-          </label>
+          <div className="flex justify-center flex-col w-96">
+            <label
+              className={`input input-bordered flex items-center gap-2 max-w-96`}
+              name="playlistName"
+              autoFocus
+              label="Playlist Name"
+              required
+            >
+              <MusicNoteIcon />
+              <input
+                type="text"
+                className="grow"
+                placeholder="Enter playlist name..."
+                defaultValue={DEFAULT_PLAYLIST_NAME}
+                ref={playlistNameInput}
+              />
+            </label>
+            <label
+              className="input input-bordered flex items-center gap-2 max-w-96 mt-2"
+              name="playlistDescription"
+              margin="dense"
+              label="Playlist Description"
+              fullWidth
+            >
+              <TextSnippetIcon />
+              <input
+                type="text"
+                className="grow"
+                placeholder="Enter playlist description..."
+                ref={playlistDescriptionInput}
+              />
+            </label>
+            <button
+              className="btn btn-success m-0 w-fit mt-2 mx-auto"
+              type="submit"
+            >
+              Create Playlist
+            </button>
+          </div>
 
           {itemType === SpotifyItemTypes.ARTIST && (
             <TopArtistSongSlider
@@ -219,7 +231,13 @@ const CreatePlaylistModal = ({
           />
         </div>
         <div className="flex mb-2 justify-center">
-          <button className="btn btn-error" type="button">
+          <button
+            className="btn btn-error"
+            onClick={() =>
+              document.getElementById("create-playlist-modal").close()
+            }
+            type="button"
+          >
             Cancel
           </button>
           <button className="btn btn-success ml-2" type="submit">

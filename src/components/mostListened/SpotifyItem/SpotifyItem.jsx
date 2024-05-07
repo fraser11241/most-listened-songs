@@ -25,8 +25,8 @@ const SpotifyItem = ({ item, children, isStyledAsDisabled }) => {
         src={imageUrl}
         alt={title}
       />
-      <div className="ml-2 overflow-auto">
-        <h2 className="m-0 text-nowrap overflow-ellipsis overflow-hidden">
+      <div className="ml-2 overflow-auto w-full">
+        <h2 className="m-0 text-nowrap overflow-ellipsis overflow-hidden w-full">
           {title}
         </h2>
         {subtitle && (
